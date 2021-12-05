@@ -1,19 +1,18 @@
 package Instances.Properties;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Builder
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class VehicleProperty {
 
 	private VehiclePropertyType vehiclePropertyType;
 
-	private Map<String,String> propertyMappings;
+	private Map<String,String> propertyMappings=new HashMap<>();
 }

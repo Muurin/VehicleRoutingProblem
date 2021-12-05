@@ -1,7 +1,7 @@
 package InstanceLoaders;
 
-import Instances.EVRPTWInstance;
 import Instances.Instance;
+import Instances.InstanceImpl;
 import Instances.Properties.InstanceProperty;
 import Instances.Properties.InstancePropertyType;
 import Instances.Properties.VehicleProperty;
@@ -10,10 +10,35 @@ import Model.Enum.LocationType;
 import Model.Location;
 import util.CartesianCoordinates;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Textual file format:
+ * <p>
+ * The instances are formatted as follows:
+ * <p>
+ * ###For each location the instance provides:
+ * -StringId as a unique identifier
+ * -Type indicates the function of the location, i.e,
+ * ---d: depot
+ * ---f: recharging station
+ * ---c: customer location
+ * -x, y are coordinates (distances are assumed to be euclidean)
+ * -demand specifies the quantity of freight capacity required
+ * -ReadyTime and DueDate are the beginning and the end of the time window (waiting is allowed)
+ * -ServiceTime denotes the entire time spend at customer for loading operations
+ * <p>
+ * ###For the electric vehicles (all identical):
+ * -"Q Vehicle fuel tank capacity": units of energy available
+ * -"C Vehicle load capacity":      units available for cargo
+ * -"r fuel consumption rate":      reduction of battery capacity when traveling one unit of distance
+ * -"g inverse refueling rate":     units of time required to recharge one unit of energy
+ * -"v average Velocity":           assumed to be constant on all arcs, required to calculate the travel time from distance
+ */
 public class EVRPTWInstanceLoader implements InstanceLoader {
 
 	@Override
@@ -33,15 +58,16 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 		try (BufferedReader br = new BufferedReader((new FileReader(path)))) {
 			String line;
 			br.readLine(); //first line - column names
+			int count = 1;
 			while ((line = br.readLine()) != null) {
 
 				if (line.trim().isEmpty()) {
 					doneWithLocationProcessing = true;
 				}
-				String[] columnValues = line.split("\s+");
+
 
 				if (!doneWithLocationProcessing) {
-
+					String[] columnValues = line.split("\s+");
 					String locationTypeString = columnValues[1];
 					String xCoordinate = columnValues[2];
 					String yCoordinate = columnValues[3];
@@ -72,31 +98,35 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 							.build());
 
 				} else {
+					if (line.trim().isEmpty()) {
+						continue;
+					}
+					String[] columnValues = line.split("/");
 					//properties
 					VehicleProperty vehicleProperty = new VehicleProperty();
-					switch (columnValues[0]) {
-						case "Q" -> {
+					switch (columnValues[0].charAt(0)) {
+						case 'Q' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY.toString(), columnValues[1]);
+							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY.toString(), columnValues[1].replaceAll("/", ""));
 						}
-						case "C" -> {
+						case 'C' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_LOAD_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_LOAD_CAPACITY.toString(), columnValues[1]);
+							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_LOAD_CAPACITY.toString(), columnValues[1].replaceAll("/", ""));
 						}
-						case "r" -> {
+						case 'r' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.FUEL_CONSUMPTION_RATE);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.FUEL_CONSUMPTION_RATE.toString(), columnValues[1]);
+							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.FUEL_CONSUMPTION_RATE.toString(), columnValues[1].replaceAll("/", ""));
 						}
-						case "g" -> {
+						case 'g' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.INVERSE_REFUELING_RATE);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.INVERSE_REFUELING_RATE.toString(), columnValues[1]);
+							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.INVERSE_REFUELING_RATE.toString(), columnValues[1].replaceAll("/", ""));
 						}
-						case "v" -> {
+						case 'v' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.AVERAGE_VELOCITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.AVERAGE_VELOCITY.toString(), columnValues[1]);
+							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.AVERAGE_VELOCITY.toString(), columnValues[1].replaceAll("/", ""));
 						}
-						default -> throw new RuntimeException();
 					}
+					vehicleProperties.add(vehicleProperty);
 				}
 
 
@@ -104,7 +134,7 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 		}
 
 
-		return EVRPTWInstance
+		return InstanceImpl
 				.builder()
 				.instanceProperties(instanceProperties)
 				.vehicleProperties(vehicleProperties)

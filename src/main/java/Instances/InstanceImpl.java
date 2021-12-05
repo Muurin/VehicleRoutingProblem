@@ -10,7 +10,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EVRPTWInstance implements Instance {
+public class InstanceImpl implements Instance {
 
 	private Set<Location> locations;
 
@@ -19,4 +19,18 @@ public class EVRPTWInstance implements Instance {
 	private Set<VehicleProperty> vehicleProperties;
 
 
+	@Override
+	public Set<Location> getLocations() {
+		return locations;
+	}
+
+	@Override
+	public Set<InstanceProperty> getInstanceProperties() {
+		return instanceProperties;
+	}
+
+	@Override
+	public Set<VehicleProperty> getVehicleProperties() {
+		return vehicleProperties;
+	}
 }
