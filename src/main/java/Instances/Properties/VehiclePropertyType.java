@@ -1,0 +1,11 @@
+package Instances.Properties;
+
+public enum VehiclePropertyType {
+
+	AVERAGE_VELOCITY,
+	INVERSE_REFUELING_RATE,
+	FUEL_CONSUMPTION_RATE,
+	VEHICLE_FUEL_TANK_CAPACITY,
+	VEHICLE_LOAD_CAPACITY
+
+}
