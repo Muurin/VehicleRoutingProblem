@@ -11,7 +11,7 @@ import util.CartesianCoordinates;
 @NoArgsConstructor
 public class Location {
 
-	//private String id;
+	private String id;
 
 	private double demand;
 

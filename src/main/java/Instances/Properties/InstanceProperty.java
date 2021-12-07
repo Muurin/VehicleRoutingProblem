@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -16,6 +15,6 @@ public class InstanceProperty {
 
 	private InstancePropertyType instancePropertyType;
 
-	private Map<String,String> propertyMappings;
+	private Map<String, String> propertyMappings;
 
 }

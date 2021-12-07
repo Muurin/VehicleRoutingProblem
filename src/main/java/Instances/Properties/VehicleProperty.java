@@ -14,5 +14,5 @@ public class VehicleProperty {
 
 	private VehiclePropertyType vehiclePropertyType;
 
-	private Map<String,String> propertyMappings=new HashMap<>();
+	private Map<String, String> propertyMappings = new HashMap<>();
 }

@@ -39,7 +39,7 @@ import java.util.Set;
  * -"g inverse refueling rate":     units of time required to recharge one unit of energy
  * -"v average Velocity":           assumed to be constant on all arcs, required to calculate the travel time from distance
  */
-public class EVRPTWInstanceLoader implements InstanceLoader {
+public class EVRP_CTWInstanceLoader implements InstanceLoader {
 
 	@Override
 	public Instance load(String path) throws IOException {
@@ -54,11 +54,11 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.HOMOGENOUS_FLEET).build());
 		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.LINEAR_CHARGING).build());
 		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.TIME_WINDOWS).build());
+		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.CAPACITATED).build());
 
 		try (BufferedReader br = new BufferedReader((new FileReader(path)))) {
 			String line;
 			br.readLine(); //first line - column names
-			int count = 1;
 			while ((line = br.readLine()) != null) {
 
 				if (line.trim().isEmpty()) {
@@ -68,6 +68,7 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 
 				if (!doneWithLocationProcessing) {
 					String[] columnValues = line.split("\s+");
+					String locationId = columnValues[0];
 					String locationTypeString = columnValues[1];
 					String xCoordinate = columnValues[2];
 					String yCoordinate = columnValues[3];
@@ -85,6 +86,7 @@ public class EVRPTWInstanceLoader implements InstanceLoader {
 
 					locations.add(Location
 							.builder()
+							.id(locationId)
 							.locationType(locationType)
 							.demand(Double.parseDouble(demand))
 							.readyTime(Double.parseDouble(readyTime))
