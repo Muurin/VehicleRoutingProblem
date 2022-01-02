@@ -2,10 +2,7 @@ package InstanceLoaders;
 
 import Instances.Instance;
 import Instances.InstanceImpl;
-import Instances.Properties.InstanceProperty;
-import Instances.Properties.InstancePropertyType;
-import Instances.Properties.VehicleProperty;
-import Instances.Properties.VehiclePropertyType;
+import Instances.Properties.*;
 import Model.Enum.LocationType;
 import Model.Location;
 import util.CartesianCoordinates;
@@ -84,20 +81,35 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 						default -> throw new RuntimeException();
 					};
 
-					locations.add(Location
+
+					Location location = Location
 							.builder()
 							.id(locationId)
 							.locationType(locationType)
-							.demand(Double.parseDouble(demand))
-							.readyTime(Double.parseDouble(readyTime))
-							.dueDate(Double.parseDouble(dueDate))
-							.serviceTime(Double.parseDouble(serviceTime))
 							.cartesianCoordinates(CartesianCoordinates
 									.builder()
 									.x(Double.parseDouble(xCoordinate))
 									.y(Double.parseDouble(yCoordinate))
 									.build())
-							.build());
+							.build();
+
+					LocationProperty property = LocationProperty.builder().locationPropertyType(LocationPropertyType.DEMAND).build();
+					property.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE,demand);
+					location.getLocationProperties().put(LocationPropertyType.DEMAND,property);
+
+					 property = LocationProperty.builder().locationPropertyType(LocationPropertyType.READY_TIME).build();
+					property.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE,readyTime);
+					location.getLocationProperties().put(LocationPropertyType.READY_TIME,property);
+
+					 property = LocationProperty.builder().locationPropertyType(LocationPropertyType.DUE_DATE).build();
+					property.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE,dueDate);
+					location.getLocationProperties().put(LocationPropertyType.DUE_DATE,property);
+
+					 property = LocationProperty.builder().locationPropertyType(LocationPropertyType.SERVICE_TIME).build();
+					property.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE,serviceTime);
+					location.getLocationProperties().put(LocationPropertyType.SERVICE_TIME,property);
+
+
 
 				} else {
 					if (line.trim().isEmpty()) {
@@ -109,23 +121,23 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 					switch (columnValues[0].charAt(0)) {
 						case 'Q' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY.toString(), columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
 						}
 						case 'C' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_LOAD_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_LOAD_CAPACITY.toString(), columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
 						}
 						case 'r' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.FUEL_CONSUMPTION_RATE);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.FUEL_CONSUMPTION_RATE.toString(), columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
 						}
 						case 'g' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.INVERSE_REFUELING_RATE);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.INVERSE_REFUELING_RATE.toString(), columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
 						}
 						case 'v' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.AVERAGE_VELOCITY);
-							vehicleProperty.getPropertyMappings().put(VehiclePropertyType.AVERAGE_VELOCITY.toString(), columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
 						}
 					}
 					vehicleProperties.add(vehicleProperty);

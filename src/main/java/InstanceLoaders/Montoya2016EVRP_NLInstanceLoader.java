@@ -2,9 +2,7 @@ package InstanceLoaders;
 
 import Instances.Instance;
 import Instances.InstanceImpl;
-import Instances.Properties.InstanceProperty;
-import Instances.Properties.InstancePropertyType;
-import Instances.Properties.VehicleProperty;
+import Instances.Properties.*;
 import Model.Enum.LocationType;
 import Model.Location;
 import org.jdom2.Document;
@@ -59,84 +57,121 @@ public class Montoya2016EVRP_NLInstanceLoader implements InstanceLoader {
 
 	@Override
 	public Instance load(String path) throws IOException, JDOMException {
-
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = builder.build(new File(path));
-		Element rootNode = doc.getRootElement();
-
-		Element network = rootNode.getChild("network");
-
-
-		Set<Location> locations = new HashSet<>();
-		Set<InstanceProperty> instanceProperties = new HashSet<>();
-		Set<VehicleProperty> vehicleProperties = new HashSet<>();
-
-		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.ELECTRIC_VEHICLE).build());
-		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.HOMOGENOUS_FLEET).build());
-		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.NON_LINEAR_CHARGING).build());
-
-		Map<String, String> locationIdRequestServiceTimeMap = new HashMap<>();
-
-		for (Element request : network.getChild("requests").getChildren("requests")) {
-			locationIdRequestServiceTimeMap.put(request.getAttributeValue("node"), request.getChild("service_time").getText());
-		}
-
-
-		for (Element location : network.getChild("nodes").getChildren("node")) {
-			locations.add(Location
-					.builder()
-					.id(location.getAttributeValue("id"))
-					.locationType(switch (location.getAttribute("type").toString()) {
-						case "0" -> LocationType.DEPOT;
-						case "2" -> LocationType.RECHARGING_STATION;
-						case "1" -> LocationType.CUSTOMER_LOCATION;
-						default -> throw new RuntimeException();
-					})
-					.cartesianCoordinates(CartesianCoordinates
-							.builder()
-							.x(Double.parseDouble(location.getChild("cx").getText()))
-							.y(Double.parseDouble(location.getChild("cy").getText()))
-							.build())
-					.serviceTime((location.getAttribute("type").toString().equals("1") ? Double
-							.parseDouble(locationIdRequestServiceTimeMap
-									.get(location.getAttributeValue("id"))) : -1))
-					.readyTime(0) // customers are ready at the start, no time-windows
-					.dueDate(0) //no time-windows -> no due date
-					.demand(1) // 1 service = 1 resource, not capacitated
-					.build());
-		}
-		//TODO Vehicle property parsing, charging function factory, consider units of measurement - standardize for all types of instances
-		for (Element vehicleProperty : network.getChild("fleet").getChildren()) {
-			switch (vehicleProperty.getName()) {
-				case "departure_node":
-					break;
-				case "arrival_node":
-					break;
-				case "max_travel_time":
-					break;
-				case "speed_factor":
-					break;
-				case "custom":
-					for (Element customProperty : vehicleProperty.getChildren()) {
-						switch (customProperty.getName()) {
-							case "consumption_rate":
-								break;
-							case "battery_capacity":
-								break;
-							case "charging_function":
-								break;
-						}
-					}
-					break;
-			}
-		}
-
-
-		return InstanceImpl
-				.builder()
-				.instanceProperties(instanceProperties)
-				.vehicleProperties(vehicleProperties)
-				.locations(locations)
-				.build();
+//
+//		SAXBuilder builder = new SAXBuilder();
+//		Document doc = builder.build(new File(path));
+//		Element rootNode = doc.getRootElement();
+//
+//		Element network = rootNode.getChild("network");
+//
+//
+//		Set<Location> locations = new HashSet<>();
+//		Set<InstanceProperty> instanceProperties = new HashSet<>();
+//		Set<VehicleProperty> vehicleProperties = new HashSet<>();
+//
+//		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.ELECTRIC_VEHICLE).build());
+//		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.HOMOGENOUS_FLEET).build());
+//		instanceProperties.add(InstanceProperty.builder().instancePropertyType(InstancePropertyType.NON_LINEAR_CHARGING).build());
+//
+//		Map<String, String> locationIdRequestServiceTimeMap = new HashMap<>();
+//
+//		for (Element request : network.getChild("requests").getChildren("requests")) {
+//			locationIdRequestServiceTimeMap.put(request.getAttributeValue("node"), request.getChild("service_time").getText());
+//		}
+//
+//
+//		for (Element locationElement : network.getChild("nodes").getChildren("node")) {
+//
+//			Location location = Location
+//					.builder()
+//					.id(locationElement.getAttributeValue("id"))
+//					.locationType(switch (locationElement.getAttribute("type").toString()) {
+//						case "0" -> LocationType.DEPOT;
+//						case "2" -> LocationType.RECHARGING_STATION;
+//						case "1" -> LocationType.CUSTOMER_LOCATION;
+//						default -> throw new RuntimeException();
+//					})
+//					.cartesianCoordinates(CartesianCoordinates
+//							.builder()
+//							.x(Double.parseDouble(locationElement.getChild("cx").getText()))
+//							.y(Double.parseDouble(locationElement.getChild("cy").getText()))
+//							.build())
+//					.build();
+//
+//			HashMap<PropertyKey, Object> locationPropertyValues = new HashMap<>();
+//			if (location.getLocationType() == LocationType.CUSTOMER_LOCATION) {
+//
+//				locationPropertyValues.put(PropertyKey.SINGLE_DOUBLE_VALUE, locationElement.getChild("service_time").getText());
+//
+//				location.getLocationProperties().put(LocationPropertyType.SERVICE_TIME,LocationProperty
+//						.builder()
+//						.locationPropertyType(LocationPropertyType.SERVICE_TIME)
+//						.propertyMappings(locationPropertyValues)
+//						.build());
+//			} else if (location.getLocationType() == LocationType.RECHARGING_STATION) {
+//
+//				LocationProperty property= LocationProperty.builder().locationPropertyType(LocationPropertyType.CHARGING_FUNCTION_TYPE).build();
+//				property.getPropertyMappings().put()
+//				locationPropertyValues.put(.toString(),LocationProperty.builder().build() locationElement.getChild("custom").getChild("cs_type").getText());
+//
+//				location.getLocationProperties().add(LocationProperty
+//						.builder()
+//						.locationPropertyType(LocationPropertyType.SERVICE_TIME)
+//						.propertyValues(locationPropertyValues)
+//						.build());
+//			}
+//
+//		}
+//		for (Element vehiclePropertyElement : network.getChild("fleet").getChildren()) {
+//			VehicleProperty vehicleProperty = new VehicleProperty();
+//			switch (vehiclePropertyElement.getName()) {
+//				case "departure_node":
+//					vehicleProperty.setVehiclePropertyType(VehiclePropertyType.DEPARTURE_NODE);
+//					vehicleProperty.getPropertyMappings().put(VehiclePropertyType.DEPARTURE_NODE.toString(), vehiclePropertyElement.getText());
+//					break;
+//				case "arrival_node":
+//					vehicleProperty.setVehiclePropertyType(VehiclePropertyType.ARRIVAL_NODE);
+//					vehicleProperty.getPropertyMappings().put(VehiclePropertyType.ARRIVAL_NODE.toString(), vehiclePropertyElement.getText());
+//					break;
+//				case "max_travel_time":
+//					vehicleProperty.setVehiclePropertyType(VehiclePropertyType.MAX_TRAVEL_TIME);
+//					vehicleProperty.getPropertyMappings().put(VehiclePropertyType.MAX_TRAVEL_TIME.toString(), vehiclePropertyElement.getText());
+//					break;
+//				case "speed_factor":
+//					vehicleProperty.setVehiclePropertyType(VehiclePropertyType.AVERAGE_VELOCITY);
+//					vehicleProperty.getPropertyMappings().put(VehiclePropertyType.AVERAGE_VELOCITY.toString(), vehiclePropertyElement.getText());
+//					break;
+//				case "custom":
+//					for (Element customProperty : vehiclePropertyElement.getChildren()) {
+//						switch (customProperty.getName()) {
+//							case "consumption_rate":
+//								vehicleProperty.setVehiclePropertyType(VehiclePropertyType.FUEL_CONSUMPTION_RATE);
+//								vehicleProperty.getPropertyMappings().put(VehiclePropertyType.FUEL_CONSUMPTION_RATE, vehiclePropertyElement.getText());
+//								break;
+//							case "battery_capacity":
+//								vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY);
+//								vehicleProperty.getPropertyMappings().put(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY, vehiclePropertyElement.getText());
+//								break;
+//							case "charging_functions":
+//								for (Element chargingFunction : customProperty.getChildren("function")) {
+//									String name = chargingFunction.getAttributeValue("cs_type");
+//
+//								}
+//								break;
+//						}
+//					}
+//					break;
+//			}
+//		}
+//
+//
+//		return InstanceImpl
+//				.builder()
+//				.instanceProperties(instanceProperties)
+//				.vehicleProperties(vehicleProperties)
+//				.locations(locations)
+//				.build();
+		return null;
 	}
+
 }

@@ -1,20 +1,14 @@
 package Instances.Properties;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.Map;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
-public class InstanceProperty {
+@NoArgsConstructor
+public class InstanceProperty extends Property{
 
 	private InstancePropertyType instancePropertyType;
-
-	private Map<String, String> propertyMappings;
-
 }

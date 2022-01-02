@@ -1,18 +1,16 @@
 package Instances.Properties;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
 
-@Builder
+@SuperBuilder
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VehicleProperty {
+public class VehicleProperty extends  Property{
 
 	private VehiclePropertyType vehiclePropertyType;
 
-	private Map<String, String> propertyMappings = new HashMap<>();
 }

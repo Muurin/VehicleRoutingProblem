@@ -3,7 +3,9 @@ package Instances;
 import Instances.Properties.InstanceProperty;
 import Instances.Properties.VehicleProperty;
 import Model.Location;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
