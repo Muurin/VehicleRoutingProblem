@@ -16,7 +16,7 @@ import java.util.*;
 @Builder
 public class Vehicle {
 
-	private String id;
+	private Long id;
 
 	private double currentTime=0;
 	private double currentLoad;
@@ -29,9 +29,17 @@ public class Vehicle {
 
 	public void addRoute(Route route){
 		vehiclePath.add(route);
+		currentFuel-=vehiclePath.peek().getFuelSpent();
+		currentDistance+=vehiclePath.peek().getDistanceTravelled();
+		currentTime+=vehiclePath.peek().getTimeSpent();
+		currentLoad-=vehiclePath.peek().getLoadTransferred();
 	}
 
 	public Route removeLastRoute(){
+		currentFuel+=vehiclePath.peek().getFuelSpent();
+		currentDistance-=vehiclePath.peek().getDistanceTravelled();
+		currentTime-=vehiclePath.peek().getTimeSpent();
+		currentLoad+=vehiclePath.peek().getLoadTransferred();
 		return vehiclePath.pop();
 	}
 
@@ -55,4 +63,6 @@ public class Vehicle {
 	public double refuel(Object object){
 		return 0;
 	}
+
+
 }

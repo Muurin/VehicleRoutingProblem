@@ -81,6 +81,19 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 						default -> throw new RuntimeException();
 					};
 
+					if(locationType==LocationType.DEPOT){
+						VehicleProperty vehicleProperty = new VehicleProperty();
+
+						vehicleProperty.setVehiclePropertyType(VehiclePropertyType.ARRIVAL_LOCATION);
+						vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_STRING_VALUE, locationId);
+						vehicleProperties.add(vehicleProperty);
+
+						vehicleProperty = new VehicleProperty();
+
+						vehicleProperty.setVehiclePropertyType(VehiclePropertyType.DEPARTURE_NODE);
+						vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_STRING_VALUE, locationId);
+						vehicleProperties.add(vehicleProperty);
+					}
 
 					Location location = Location
 							.builder()
@@ -143,10 +156,8 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 					vehicleProperties.add(vehicleProperty);
 				}
 
-
 			}
 		}
-
 
 		return InstanceImpl
 				.builder()

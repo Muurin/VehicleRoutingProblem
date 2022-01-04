@@ -13,7 +13,7 @@ public class MathUtil {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
 
-	public boolean areEqual(double value1, double value2, Double precision) {
+	public static boolean areEqual(double value1, double value2, Double precision) {
 		if (precision == null) {
 			precision = 10E-5;
 		}

@@ -28,7 +28,7 @@ public class VehicleFactory {
 		Vehicle vehicle = Vehicle
 				.builder()
 				.vehiclePropertyMap(vehicleProperties)
-				.id(latestId.toString())
+				.id(latestId)
 				.build();
 
 		latestId += 1;

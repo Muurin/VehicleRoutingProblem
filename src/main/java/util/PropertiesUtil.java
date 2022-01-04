@@ -15,6 +15,16 @@ public class PropertiesUtil {
 		}
 	}
 
+	public static String getStringPropertyValue(Property property) {
+
+		try {
+			return ((String) property.getPropertyMappings().get(PropertyKey.SINGLE_DOUBLE_VALUE));
+
+		} catch (Exception e) {
+			throw new RuntimeException("Krivi tip propertia");
+		}
+	}
+
 	public static void setDoublePropertyValue(Property property, Double value){
 		try {
 			property.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE,value);

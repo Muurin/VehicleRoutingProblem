@@ -23,7 +23,7 @@ public class SolutionContext {
 
 	private Map<String, Location> customers = new HashMap<>();
 
-	private Map<String, Vehicle> vehicles = new HashMap<>();
+	private Map<Long, Vehicle> vehicles = new HashMap<>();
 
 	private Set<InstanceProperty> instanceProperties;
 
@@ -51,13 +51,13 @@ public class SolutionContext {
 
 	}
 
-	private void addVehicle() {
-		Long id = 1L;
-		Vehicle vehicle = new Vehicle();
-		vehicles.put(vehicle.getId(), vehicle);
+	public Vehicle addVehicle() {
+		Vehicle vehicle=vehicleFactory.createVehicle();
+		vehicles.put(vehicle.getId(),vehicle);
+		return vehicle;
 	}
 
-	private void reset() {
+	public void reset() {
 		servicedCustomers.clear();
 		customers.forEach((key, value) -> value.reset());
 		vehicles.clear();

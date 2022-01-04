@@ -26,6 +26,10 @@ public class Route {
 
 	private double timeArrivedAtDestination;
 
+	private double fuelSpent;
+
+	private double loadTransferred=0;
+
 	public Route(Location startingLocation, Location destinationLocation, Vehicle vehicle){
 		this.startingLocation=startingLocation;
 		this.destinationLocation=destinationLocation;
@@ -34,6 +38,8 @@ public class Route {
 				/ MathUtil.getEuclideanDistanceTo(startingLocation,destinationLocation);
 
 		distanceTravelled=MathUtil.getEuclideanDistanceTo(startingLocation,destinationLocation);
+
+		fuelSpent= PropertiesUtil.getDoublePropertyValue(vehicle.getVehiclePropertyMap().get(VehiclePropertyType.FUEL_CONSUMPTION_RATE))*distanceTravelled;
 
 		timeArrivedAtDestination= vehicle.getCurrentTime()+timeSpent;
 
