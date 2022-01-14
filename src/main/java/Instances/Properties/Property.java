@@ -1,9 +1,6 @@
 package Instances.Properties;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashMap;
@@ -16,5 +13,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class Property {
 
+	@Builder.Default
 	private Map<PropertyKey, Object> propertyMappings = new HashMap<>();
 }

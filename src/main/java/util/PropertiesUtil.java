@@ -18,7 +18,7 @@ public class PropertiesUtil {
 	public static String getStringPropertyValue(Property property) {
 
 		try {
-			return ((String) property.getPropertyMappings().get(PropertyKey.SINGLE_DOUBLE_VALUE));
+			return ((String) property.getPropertyMappings().get(PropertyKey.SINGLE_STRING_VALUE));
 
 		} catch (Exception e) {
 			throw new RuntimeException("Krivi tip propertia");
@@ -33,5 +33,6 @@ public class PropertiesUtil {
 			throw new RuntimeException("Krivi tip propertia");
 		}
 	}
+
 
 }

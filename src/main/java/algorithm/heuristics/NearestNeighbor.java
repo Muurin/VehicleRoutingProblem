@@ -1,10 +1,11 @@
 package algorithm.heuristics;
 
 import Instances.Instance;
+import Instances.Properties.VehiclePropertyType;
 import Model.Location;
 import Model.Vehicle;
-import algorithm.paths.Route;
 import algorithm.solution.SolutionContext;
+import util.PropertiesUtil;
 import util.SolutionUtil;
 import util.VehicleUtil;
 
@@ -28,50 +29,39 @@ public class NearestNeighbor {
 	public static SolutionContext start(Instance instance) {
 
 		SolutionContext solutionContext = new SolutionContext(instance);
-		while (SolutionUtil.customersInNeedOfService(solutionContext)) {
+		while (SolutionUtil.anyCustomersInNeedOfService(solutionContext)) {
 
-			boolean returnToDepot = false;
 			Vehicle currentVehicle = solutionContext.addVehicle();
-			VehicleUtil.initializeDepot(solutionContext, currentVehicle);
+			VehicleUtil.initializeDepot(currentVehicle);
+			Location depot= solutionContext.getDepots().get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.ARRIVAL_LOCATION)));
 
 			Location nextLocation = SolutionUtil.getRandomLocation(solutionContext.getCustomers().values());
 
-			//vehicle can't reach nearest customer from depot - return null?
-			//TODO heuristic for calculating moves in advance, using charging stations as intermediates
-			if (!SolutionUtil.hasEnoughFuelToVisit(currentVehicle, nextLocation)) {
-				return null;
-			}
+			//service customers
+			while(!nextLocation.equals(depot)){
 
-			while (!returnToDepot) {
+				if(!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle,nextLocation)){
+					nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,nextLocation);
+				}
 
+				currentVehicle.travelTo(nextLocation);
 
-				//vehicle doesn't have enough fuel to visit customer, needs refueling
-				if (!SolutionUtil.hasEnoughFuelToVisit(currentVehicle, nextLocation)) {
-					Location nearestChargingStation = SolutionUtil.findNearestLocationFrom(solutionContext.getChargingStations().values(), currentVehicle.getVehiclePath().peek().getDestinationLocation());
-					//vehicle doesn't have enough fuel to visit nearest charging station
-					if (!SolutionUtil.hasEnoughFuelToVisit(currentVehicle, nearestChargingStation)) {
-						//backtrace
-						currentVehicle.removeLastRoute();
-						continue;
-					}
-					else{
-						currentVehicle.addRoute(Route.builder().build());
-					}
+				if(VehicleUtil.canServiceAtLeastOneCustomer(currentVehicle)){
+					nextLocation= SolutionUtil.findNearestLocationFrom(solutionContext.getCustomers().values(),currentVehicle.getCurrentLocation());
 				}
 				else{
-					SolutionUtil.serviceCustomer(solutionContext,nextLocation,currentVehicle);
+					nextLocation=depot;
 				}
 
 			}
-
-			if (!SolutionUtil.customersInNeedOfService(solutionContext)) {
-				returnToDepot = true;
-			}
-
 			//return to depot
-			//TODO heuristic for returning to the depot with refueling?
+			while(!currentVehicle.getCurrentLocation().equals(depot)){
+				if(!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle,depot)){
+					nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,depot);
+				}
+				currentVehicle.travelTo(nextLocation);
+			}
 		}
-
 
 		return solutionContext;
 	}

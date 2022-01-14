@@ -6,6 +6,7 @@ import Model.Location;
 import Model.Vehicle;
 import Model.VehicleFactory;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class SolutionContext {
 
 	private Map<String, Location> depots = new HashMap<>();
@@ -34,20 +36,14 @@ public class SolutionContext {
 	public SolutionContext(Instance instance) {
 		for (Location location : instance.getLocations()) {
 			switch (location.getLocationType()) {
-				case CUSTOMER_LOCATION:
-					customers.put(location.getId(), location);
-					break;
-				case DEPOT:
-					depots.put(location.getId(), location);
-					break;
-				case RECHARGING_STATION:
-					chargingStations.put(location.getId(), location);
-					break;
+				case CUSTOMER_LOCATION -> customers.put(location.getId(), location);
+				case DEPOT -> depots.put(location.getId(), location);
+				case RECHARGING_STATION -> chargingStations.put(location.getId(), location);
 			}
 		}
 
 		instanceProperties = instance.getInstanceProperties();
-		vehicleFactory = new VehicleFactory(instance.getVehicleProperties());
+		vehicleFactory = new VehicleFactory(this,instance.getVehicleProperties());
 
 	}
 

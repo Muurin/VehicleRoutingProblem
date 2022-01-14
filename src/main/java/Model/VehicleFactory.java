@@ -2,7 +2,11 @@ package Model;
 
 import Instances.Properties.VehicleProperty;
 import Instances.Properties.VehiclePropertyType;
+import algorithm.solution.SolutionContext;
+import util.PropertiesUtil;
+import util.VehicleUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,23 +18,29 @@ public class VehicleFactory {
 
 	private Long latestId = 1L;
 
-	Map<VehiclePropertyType, VehicleProperty> vehicleProperties;
+	private SolutionContext solutionContext;
 
-	public VehicleFactory(Set<VehicleProperty> vehicleProperties) {
+	private Map<VehiclePropertyType, VehicleProperty> vehicleProperties=new HashMap<>();
+
+	public VehicleFactory(SolutionContext solutionContext,Set<VehicleProperty> vehicleProperties) {
 
 		for (VehicleProperty vehicleProperty : vehicleProperties) {
 			this.vehicleProperties.put(vehicleProperty.getVehiclePropertyType(), vehicleProperty);
 		}
+		this.solutionContext=solutionContext;
 
 	}
 
 	public Vehicle createVehicle() {
 		Vehicle vehicle = Vehicle
 				.builder()
+				.solutionContext(solutionContext)
 				.vehiclePropertyMap(vehicleProperties)
 				.id(latestId)
+				.currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
+				.currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
 				.build();
-
+		VehicleUtil.initializeDepot(vehicle);
 		latestId += 1;
 		return vehicle;
 	}

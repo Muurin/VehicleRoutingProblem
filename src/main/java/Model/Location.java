@@ -24,6 +24,7 @@ public class Location {
 
 	private LocationType locationType;
 
+	@Builder.Default
 	private Map<LocationPropertyType, LocationProperty> locationProperties = new HashMap<>();
 
 	public void reset() {

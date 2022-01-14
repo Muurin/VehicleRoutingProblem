@@ -67,12 +67,12 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 					String[] columnValues = line.split("\s+");
 					String locationId = columnValues[0];
 					String locationTypeString = columnValues[1];
-					String xCoordinate = columnValues[2];
-					String yCoordinate = columnValues[3];
-					String demand = columnValues[4];
-					String readyTime = columnValues[5];
-					String dueDate = columnValues[6];
-					String serviceTime = columnValues[7];
+					double xCoordinate = Double.parseDouble(columnValues[2]);
+					double yCoordinate = Double.parseDouble(columnValues[3]);
+					double demand = Double.parseDouble(columnValues[4]);
+					double readyTime = Double.parseDouble(columnValues[5]);
+					double dueDate = Double.parseDouble(columnValues[6]);
+					double serviceTime = Double.parseDouble(columnValues[7]);
 
 					LocationType locationType = switch (locationTypeString.trim()) {
 						case "d" -> LocationType.DEPOT;
@@ -90,7 +90,7 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 
 						vehicleProperty = new VehicleProperty();
 
-						vehicleProperty.setVehiclePropertyType(VehiclePropertyType.DEPARTURE_NODE);
+						vehicleProperty.setVehiclePropertyType(VehiclePropertyType.DEPARTURE_LOCATION);
 						vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_STRING_VALUE, locationId);
 						vehicleProperties.add(vehicleProperty);
 					}
@@ -101,8 +101,8 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 							.locationType(locationType)
 							.cartesianCoordinates(CartesianCoordinates
 									.builder()
-									.x(Double.parseDouble(xCoordinate))
-									.y(Double.parseDouble(yCoordinate))
+									.x(xCoordinate)
+									.y(yCoordinate)
 									.build())
 							.build();
 
@@ -123,7 +123,7 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 					location.getLocationProperties().put(LocationPropertyType.SERVICE_TIME,property);
 
 
-
+					locations.add(location);
 				} else {
 					if (line.trim().isEmpty()) {
 						continue;
@@ -134,28 +134,27 @@ public class EVRP_CTWInstanceLoader implements InstanceLoader {
 					switch (columnValues[0].charAt(0)) {
 						case 'Q' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, Double.parseDouble(columnValues[1].replaceAll("/", "")));
 						}
 						case 'C' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.VEHICLE_LOAD_CAPACITY);
-							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, Double.parseDouble(columnValues[1].replaceAll("/", "")));
 						}
 						case 'r' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.FUEL_CONSUMPTION_RATE);
-							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, Double.parseDouble(columnValues[1].replaceAll("/", "")));
 						}
 						case 'g' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.INVERSE_REFUELING_RATE);
-							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, Double.parseDouble(columnValues[1].replaceAll("/", "")));
 						}
 						case 'v' -> {
 							vehicleProperty.setVehiclePropertyType(VehiclePropertyType.AVERAGE_VELOCITY);
-							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, columnValues[1].replaceAll("/", ""));
+							vehicleProperty.getPropertyMappings().put(PropertyKey.SINGLE_DOUBLE_VALUE, Double.parseDouble(columnValues[1].replaceAll("/", "")));
 						}
 					}
 					vehicleProperties.add(vehicleProperty);
 				}
-
 			}
 		}
 
