@@ -1,4 +1,4 @@
-package loaderTests;
+package algorithm.solution;
 
 public class VRPInstancePaths {
 

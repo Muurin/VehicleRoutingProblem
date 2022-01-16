@@ -25,8 +25,8 @@ public class NearestNeighbor {
 	 *
 	 *Problem ako su neki customeri predaleko pa auti zapnu, pretpostavka da toga nema?
 	 */
-
-	public static SolutionContext start(Instance instance) {
+	//TODO discover the source of cyclic behviour of vehicle traveling between two customers- shouldn't ever happen (happened for C15 and C16 with visit to C7 every now and then)
+	public static SolutionContext start(Instance instance) throws InterruptedException {
 
 		SolutionContext solutionContext = new SolutionContext(instance);
 		while (SolutionUtil.anyCustomersInNeedOfService(solutionContext)) {
@@ -34,19 +34,24 @@ public class NearestNeighbor {
 			Vehicle currentVehicle = solutionContext.addVehicle();
 			VehicleUtil.initializeDepot(currentVehicle);
 			Location depot= solutionContext.getDepots().get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.ARRIVAL_LOCATION)));
-
+			System.out.println("Novi auto");
+			System.out.println("Ostalo je" +solutionContext.getCustomers().size()+" customera");
 			Location nextLocation = SolutionUtil.getRandomLocation(solutionContext.getCustomers().values());
 
 			//service customers
 			while(!nextLocation.equals(depot)){
 
+
 				if(!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle,nextLocation)){
 					nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,nextLocation);
 				}
-
+//				System.out.println(currentVehicle.getCurrentFuel());
+				System.out.println("Prema " + nextLocation.getId());
 				currentVehicle.travelTo(nextLocation);
 
-				if(VehicleUtil.canServiceAtLeastOneCustomer(currentVehicle)){
+				nextLocation = VehicleUtil.getClosestReachableAndServiceableCustomer(currentVehicle,solutionContext);
+
+				if(nextLocation!=null){
 					nextLocation= SolutionUtil.findNearestLocationFrom(solutionContext.getCustomers().values(),currentVehicle.getCurrentLocation());
 				}
 				else{
@@ -54,15 +59,25 @@ public class NearestNeighbor {
 				}
 
 			}
+			System.out.println("Vraćanje doma");
+
 			//return to depot
 			while(!currentVehicle.getCurrentLocation().equals(depot)){
-				if(!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle,depot)){
+
+				System.out.println("Prema depotu");
+				if(!VehicleUtil.canReachLocation(currentVehicle,depot)){
+
 					nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,depot);
+				}else {
+					nextLocation=depot;
 				}
+				Thread.sleep(1000);
+				System.out.println("Next loc je"+nextLocation.getCartesianCoordinates());
+				System.out.println("Do next loc mi treba " + VehicleUtil.requiredFuel(currentVehicle,currentVehicle.getCurrentLocation(),nextLocation)+" a imam "+ currentVehicle.getCurrentFuel());
 				currentVehicle.travelTo(nextLocation);
 			}
 		}
-
+		System.out.println("Gotovo");
 		return solutionContext;
 	}
 

@@ -25,13 +25,13 @@ public class SolutionContext {
 
 	private Map<String, Location> customers = new HashMap<>();
 
+	private Map<String,Location> servicedCustomers = new HashMap<>();
+
 	private Map<Long, Vehicle> vehicles = new HashMap<>();
 
 	private Set<InstanceProperty> instanceProperties;
 
 	private VehicleFactory vehicleFactory;
-
-	private Set<String> servicedCustomers = new HashSet<>();
 
 	public SolutionContext(Instance instance) {
 		for (Location location : instance.getLocations()) {

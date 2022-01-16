@@ -6,8 +6,10 @@ import Model.Enum.LocationType;
 import Model.Location;
 import Model.Vehicle;
 import algorithm.paths.Route;
+import algorithm.solution.SolutionContext;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class VehicleUtil {
 
@@ -54,6 +56,20 @@ public class VehicleUtil {
 
 	public static boolean canServiceAtLeastOneCustomer(Vehicle vehicle) {
 		return vehicle.getSolutionContext().getCustomers().values().stream().anyMatch(location -> canServiceCustomer(vehicle, location));
+	}
+
+	/**
+	 * Returns null if there is no valid location found
+	 * @param vehicle
+	 * @param solutionContext
+	 * @return
+	 */
+	public static Location getClosestReachableAndServiceableCustomer(Vehicle vehicle, SolutionContext solutionContext){
+
+		List<Location> locationSortedByDistance = SolutionUtil.locationsSortedByDistance(solutionContext.getCustomers().values(),vehicle.getCurrentLocation());
+		return locationSortedByDistance.stream().filter(location -> canServiceCustomer(vehicle, location)).findFirst().orElse(null);
+
+
 	}
 
 }

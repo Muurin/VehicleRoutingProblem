@@ -68,6 +68,8 @@ public class Vehicle {
 
 	//full recharge
 	public double refuel() {
+		currentFuel=PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY));
+
 		return (PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)) - currentFuel)
 				* PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.INVERSE_REFUELING_RATE));
 	}

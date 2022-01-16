@@ -20,7 +20,7 @@ public class SolutionUtil {
 	}
 
 	public static boolean anyCustomersInNeedOfService(SolutionContext solutionContext) {
-		return solutionContext.getCustomers().size() != solutionContext.getServicedCustomers().size();
+		return solutionContext.getCustomers().size() != 0;
 	}
 
 	public static Location getRandomLocation(Collection<Location> locations) {

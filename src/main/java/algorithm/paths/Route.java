@@ -47,23 +47,25 @@ public class Route {
 		//currently unloading time is constant and does not depend of load size, this assumes that customers and not visited after being fully serviced
 		if (destinationLocation.getLocationType() == LocationType.CUSTOMER_LOCATION) {
 
-			if (destinationLocation.getLocationProperties().containsKey(LocationPropertyType.SERVICE_TIME)) {
-				timeSpent = PropertiesUtil.getDoublePropertyValue(destinationLocation.getLocationProperties().get(LocationPropertyType.SERVICE_TIME));
-			}
-
 			LocationProperty demandProperty = destinationLocation.getLocationProperties().get(LocationPropertyType.DEMAND);
-			LocationProperty demandFulfilledProperty = destinationLocation.getLocationProperties().get(LocationPropertyType.DEMAND_FULFILLED);
 
-			double demandFulfilled = PropertiesUtil.getDoublePropertyValue(demandFulfilledProperty);
 			double demand = PropertiesUtil.getDoublePropertyValue(demandProperty);
-			double transferred = demand - demandFulfilled;
 
-			PropertiesUtil.setDoublePropertyValue(demandFulfilledProperty, demand + transferred);
-			vehicle.setCurrentLoad(vehicle.getCurrentLoad() - transferred);
+			if(vehicle.getCurrentLoad() >= demand){
 
-			this.loadTransferred = transferred;
+				if (destinationLocation.getLocationProperties().containsKey(LocationPropertyType.SERVICE_TIME)) {
+					timeSpent = PropertiesUtil.getDoublePropertyValue(destinationLocation.getLocationProperties().get(LocationPropertyType.SERVICE_TIME));
+				}
 
-			vehicle.getSolutionContext().getServicedCustomers().add(destinationLocation.getId());
+				vehicle.setCurrentLoad(vehicle.getCurrentLoad() - demand);
+
+				this.loadTransferred = demand;
+
+				vehicle.getSolutionContext().getServicedCustomers().put(destinationLocation.getId(),destinationLocation);
+
+				vehicle.getSolutionContext().getCustomers().remove(destinationLocation.getId());
+
+			}
 
 		} else if (destinationLocation.getLocationType() == LocationType.RECHARGING_STATION) {
 			timeSpent += vehicle.refuel();

@@ -7,6 +7,7 @@ import Instances.Instance;
 import Instances.Properties.VehiclePropertyType;
 import Model.Vehicle;
 import algorithm.solution.SolutionContext;
+import algorithm.solution.VRPInstancePaths;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class EVRP_CTWLoaderTest {
 	@Test
 	public void testLoader() throws IOException, JDOMException {
 
-		String instancePath=VRPInstancePaths.getEVRP_CTWPath1();
+		String instancePath= VRPInstancePaths.getEVRP_CTWPath1();
 
 		InstanceLoader instanceLoader = new EVRP_CTWInstanceLoader();
 		Instance instance= instanceLoader.load(instancePath);
