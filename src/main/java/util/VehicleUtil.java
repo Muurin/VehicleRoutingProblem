@@ -34,12 +34,12 @@ public class VehicleUtil {
 		if (customer.getLocationType() != LocationType.CUSTOMER_LOCATION) {
 			throw new RuntimeException("greska");
 		}
-		return vehicle.getCurrentLoad() >= PropertiesUtil.getDoublePropertyValue(customer.getLocationProperties().get(LocationPropertyType.DEMAND));
+		return !vehicle.getSolutionContext().getServicedCustomers().containsKey(customer.getId()) && vehicle.getCurrentLoad() >= PropertiesUtil.getDoublePropertyValue(customer.getLocationProperties().get(LocationPropertyType.DEMAND));
 	}
 
 	public static boolean canReachLocationAndNearestChargingStation(Vehicle vehicle, Location targetLocation) {
 		return vehicle.getCurrentFuel() >= requiredFuel(vehicle, vehicle.getCurrentLocation(), targetLocation)
-				+ requiredFuel(vehicle, targetLocation, SolutionUtil.findNearestLocationFrom(vehicle.getSolutionContext().getChargingStations().values(), targetLocation));
+				+ requiredFuel(vehicle, targetLocation, SolutionUtil.findNearestLocationFromNotVisited(vehicle.getSolutionContext().getChargingStations().values(), targetLocation, vehicle.getSolutionContext().getServicedCustomers()));
 	}
 
 	public static boolean canReachLocation(Vehicle vehicle, Location targetLocation){
@@ -55,7 +55,8 @@ public class VehicleUtil {
 	}
 
 	public static boolean canServiceAtLeastOneCustomer(Vehicle vehicle) {
-		return vehicle.getSolutionContext().getCustomers().values().stream().anyMatch(location -> canServiceCustomer(vehicle, location));
+		SolutionContext  solutionContext= vehicle.getSolutionContext();
+		return solutionContext.getCustomers().values().stream().anyMatch(location -> !solutionContext.getServicedCustomers().containsKey(location.getId()) && canServiceCustomer(vehicle, location));
 	}
 
 	/**

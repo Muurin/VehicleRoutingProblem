@@ -3,11 +3,9 @@ package util;
 import Model.Location;
 import algorithm.solution.SolutionContext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 public class SolutionUtil {
 
@@ -15,12 +13,12 @@ public class SolutionUtil {
 		return locations.stream().filter(location -> !location.getId().equals(currentLocation.getId())).sorted(Comparator.comparingDouble(o -> MathUtil.getEuclideanDistanceTo(o, currentLocation))).collect(Collectors.toList());
 	}
 
-	public static Location findNearestLocationFrom(Collection<Location> locations, Location currentLocation) {
-		return locations.stream().filter(location -> !location.getId().equals(currentLocation.getId())).min(Comparator.comparingDouble(o -> MathUtil.getEuclideanDistanceTo(o, currentLocation))).orElse(null);
+	public static Location findNearestLocationFromNotVisited(Collection<Location> locations, Location currentLocation, Map<String,Location> visited) {
+		return locations.stream().filter(location -> !visited.containsKey(location.getId())&& !location.getId().equals(currentLocation.getId())).min(Comparator.comparingDouble(o -> MathUtil.getEuclideanDistanceTo(o, currentLocation))).orElse(null);
 	}
 
 	public static boolean anyCustomersInNeedOfService(SolutionContext solutionContext) {
-		return solutionContext.getCustomers().size() != 0;
+		return solutionContext.getCustomers().size() == solutionContext.getServicedCustomers().size();
 	}
 
 	public static Location getRandomLocation(Collection<Location> locations) {

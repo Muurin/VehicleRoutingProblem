@@ -12,7 +12,7 @@ public class SolutionUtilTests {
 	@Test
 	public void findNearestLocationFrom(){
 		SolutionContext solutionContext= ObjectInitializers.createSolutionContextExample1();
-		Assertions.assertEquals("3", SolutionUtil.findNearestLocationFrom(solutionContext.getCustomers().values(),solutionContext.getCustomers().get("5")).getId());
+		Assertions.assertEquals("3", SolutionUtil.findNearestLocationFromNotVisited(solutionContext.getCustomers().values(),solutionContext.getCustomers().get("5"), solutionContext.getServicedCustomers()).getId());
 	}
 
 	@Test

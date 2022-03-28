@@ -44,7 +44,7 @@ public class Route {
 
 		timeArrivedAtDestination = vehicle.getCurrentTime() + timeSpent;
 
-		//currently unloading time is constant and does not depend of load size, this assumes that customers and not visited after being fully serviced
+		//currently unloading time is constant and does not depend on load size, this assumes that customers and not visited after being fully serviced
 		if (destinationLocation.getLocationType() == LocationType.CUSTOMER_LOCATION) {
 
 			LocationProperty demandProperty = destinationLocation.getLocationProperties().get(LocationPropertyType.DEMAND);
@@ -54,7 +54,7 @@ public class Route {
 			if(vehicle.getCurrentLoad() >= demand){
 
 				if (destinationLocation.getLocationProperties().containsKey(LocationPropertyType.SERVICE_TIME)) {
-					timeSpent = PropertiesUtil.getDoublePropertyValue(destinationLocation.getLocationProperties().get(LocationPropertyType.SERVICE_TIME));
+					timeSpent += PropertiesUtil.getDoublePropertyValue(destinationLocation.getLocationProperties().get(LocationPropertyType.SERVICE_TIME));
 				}
 
 				vehicle.setCurrentLoad(vehicle.getCurrentLoad() - demand);
@@ -62,8 +62,6 @@ public class Route {
 				this.loadTransferred = demand;
 
 				vehicle.getSolutionContext().getServicedCustomers().put(destinationLocation.getId(),destinationLocation);
-
-				vehicle.getSolutionContext().getCustomers().remove(destinationLocation.getId());
 
 			}
 

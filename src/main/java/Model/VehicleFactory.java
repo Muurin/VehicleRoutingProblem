@@ -16,33 +16,51 @@ import java.util.Set;
  */
 public class VehicleFactory {
 
-	private Long latestId = 1L;
+    private Long latestId = 1L;
 
-	private SolutionContext solutionContext;
+    private SolutionContext solutionContext;
 
-	private Map<VehiclePropertyType, VehicleProperty> vehicleProperties=new HashMap<>();
+    private Map<VehiclePropertyType, VehicleProperty> vehicleProperties = new HashMap<>();
 
-	public VehicleFactory(SolutionContext solutionContext,Set<VehicleProperty> vehicleProperties) {
+    public VehicleFactory(SolutionContext solutionContext, Set<VehicleProperty> vehicleProperties) {
 
-		for (VehicleProperty vehicleProperty : vehicleProperties) {
-			this.vehicleProperties.put(vehicleProperty.getVehiclePropertyType(), vehicleProperty);
-		}
-		this.solutionContext=solutionContext;
+        for (VehicleProperty vehicleProperty : vehicleProperties) {
+            this.vehicleProperties.put(vehicleProperty.getVehiclePropertyType(), vehicleProperty);
+        }
+        this.solutionContext = solutionContext;
 
-	}
+    }
 
-	public Vehicle createVehicle() {
-		Vehicle vehicle = Vehicle
-				.builder()
-				.solutionContext(solutionContext)
-				.vehiclePropertyMap(vehicleProperties)
-				.id(latestId)
-				.currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
-				.currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
-				.build();
-		VehicleUtil.initializeDepot(vehicle);
-		latestId += 1;
-		return vehicle;
-	}
+    public Vehicle createVehicle() {
+        Vehicle vehicle = Vehicle
+                .builder()
+                .solutionContext(solutionContext)
+                .vehiclePropertyMap(vehicleProperties)
+                .id(latestId)
+                .currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
+                .currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
+                .build();
+        VehicleUtil.initializeDepot(vehicle);
+        latestId += 1;
+        return vehicle;
+    }
+
+    public Vehicle createVehicleSpecificId(Long id) {
+        if (!solutionContext.getVehicles().containsKey(id)) {
+            Vehicle vehicle = Vehicle
+                    .builder()
+                    .id(id)
+                    .solutionContext(solutionContext)
+                    .vehiclePropertyMap(vehicleProperties)
+                    .currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
+                    .currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
+                    .build();
+            VehicleUtil.initializeDepot(vehicle);
+            latestId += 1;
+            return vehicle;
+        }
+        throw new RuntimeException("Vehicle id already exists");
+
+    }
 
 }

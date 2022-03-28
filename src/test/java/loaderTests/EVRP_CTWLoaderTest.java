@@ -20,7 +20,8 @@ public class EVRP_CTWLoaderTest {
 	@Test
 	public void testLoader() throws IOException, JDOMException {
 
-		String instancePath= VRPInstancePaths.getEVRP_CTWPath1();
+//		String instancePath= VRPInstancePaths.getEVRP_CTWPath1();
+		String instancePath= VRPInstancePaths.getEVRP_CTWPath2();
 
 		InstanceLoader instanceLoader = new EVRP_CTWInstanceLoader();
 		Instance instance= instanceLoader.load(instancePath);
