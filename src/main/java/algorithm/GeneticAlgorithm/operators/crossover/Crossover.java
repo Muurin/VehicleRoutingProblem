@@ -1,4 +1,4 @@
-package algorithm.GeneticAlgorithm.operators;
+package algorithm.GeneticAlgorithm.operators.crossover;
 
 import algorithm.GeneticAlgorithm.model.GAChromosome;
 
@@ -10,5 +10,4 @@ public interface Crossover {
     //feasibility - capacity of vehicles
     //crossover  may change the order and vehicles alike
     //sortirati po customerima i raditi uniform crossover, paziti na crossover, ako bi neka promjena napravila narusila feasiblity, odustati ako treba forsati mutation
-    //
 }

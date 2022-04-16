@@ -1,30 +1,46 @@
-package util;
+package algorithm.GeneticAlgorithm.model;
 
 import Instances.Properties.LocationPropertyType;
 import Instances.Properties.VehicleProperty;
 import Instances.Properties.VehiclePropertyType;
 import Model.Location;
 import Model.Vehicle;
-import algorithm.GeneticAlgorithm.model.Allele;
-import algorithm.GeneticAlgorithm.model.GAChromosome;
 import algorithm.paths.Route;
 import algorithm.solution.SolutionContext;
-import lombok.AllArgsConstructor;
+import algorithm.solution.evaluators.SolutionEvaluator;
+import lombok.RequiredArgsConstructor;
+import util.Util;
+import util.PropertiesUtil;
+import util.VehicleUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@AllArgsConstructor
-public class GAUtil {
+@RequiredArgsConstructor
+public class GAChromosomeFactory {
 
-    private Map<VehiclePropertyType, VehicleProperty> vehiclePropertyMap;
+    private final SolutionContext solutionContext;
 
-    //TODO method that generates random feasible solution using random keys algorithm
-    //input : customer Ids, number of vehicles
-    //output : feasible GA solution
-    // vehicle ordinal starts from 1
-    public GAChromosome generateFeasibleGASolution(Map<String, Location> customers, Integer numberOfVehicles) {
+    private final SolutionEvaluator solutionEvaluator;
+
+    public GAChromosome createGAChromosome(int numberOfVehicles, List<Allele> alleles){
+
+        GAChromosome gaChromosome = new GAChromosome();
+
+        gaChromosome.setNumberOfVehicles(numberOfVehicles);
+        gaChromosome.setAlleles(alleles);
+
+        extendSolutionWithChargingStations(alleles);
+        gaChromosome.setFitness(solutionEvaluator.evaluate(solutionContext));
+        solutionContext.reset();
+
+        return gaChromosome;
+    }
+
+    public GAChromosome createRandomFeasibleGAChromosome(int numberOfVehicles){
+        Map<String, Location> customers = solutionContext.getCustomers();
+        Map<VehiclePropertyType, VehicleProperty> vehiclePropertyMap = solutionContext.addVehicle().getVehiclePropertyMap();
 
         double[] randomWeights = new double[customers.size()];
         Location[] locations = new Location[customers.size()];
@@ -40,13 +56,13 @@ public class GAUtil {
 
             locations[count] = location;
 
-            int vehicle = getRandomElementFromCollection(availableVehicles);
+            int vehicle = Util.getRandomElementFromCollection(availableVehicles);
 
             double requiredResources = PropertiesUtil.getDoublePropertyValue(location.getLocationProperties().get(LocationPropertyType.DEMAND));
 
             while (availableResources[vehicle - 1] < requiredResources) {
                 availableVehicles.remove(vehicle);
-                vehicle = getRandomElementFromCollection(availableVehicles);
+                vehicle = Util.getRandomElementFromCollection(availableVehicles);
             }
 
             availableResources[vehicle - 1] -= requiredResources;
@@ -56,27 +72,16 @@ public class GAUtil {
 
         List<Allele> alleles = IntStream.range(0, locations.length)
                 .mapToObj(e -> Allele.builder().location(locations[e]).weight(randomWeights[e]).build()).collect(Collectors.toList());
-        return GAChromosome
-                .builder()
-                .vehicleLoadCapacity(PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
-                .alleles(alleles).numberOfVehicles(numberOfVehicles)
-                .build();
 
+        return createGAChromosome(numberOfVehicles,alleles);
     }
 
-    private <T> T getRandomElementFromCollection(Collection<T> collection) {
-        if (collection.isEmpty()) {
-            throw new RuntimeException("Not enough vehicles");
-        }
-        return (T) collection.toArray()[new Random().nextInt(collection.size())];
-    }
+    private void extendSolutionWithChargingStations(List<Allele> alleles) {
 
-    public void extendSolutionWithChargingStations(SolutionContext solutionContext, GAChromosome gaChromosome) {
-
-        Location startingLocation = null;
+        Location startingLocation;
         Location destination = null;
 
-        for (Allele allele : gaChromosome.getAlleles()) {
+        for (Allele allele : alleles) {
 
             Long vehicleId = Math.round(allele.getWeight());
             Vehicle currentVehicle = !solutionContext.getVehicles().containsKey(vehicleId) ?
@@ -98,7 +103,7 @@ public class GAUtil {
 
         }
 
-
     }
+
 
 }

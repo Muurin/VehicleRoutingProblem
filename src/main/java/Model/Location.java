@@ -27,13 +27,6 @@ public class Location {
 	@Builder.Default
 	private Map<LocationPropertyType, LocationProperty> locationProperties = new HashMap<>();
 
-	public void reset() {
-
-//		if (locationType == LocationType.CUSTOMER_LOCATION) {
-//			PropertiesUtil.setDoublePropertyValue(locationProperties.get(LocationPropertyType.DEMAND_FULFILLED), 0.0);
-//		}
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

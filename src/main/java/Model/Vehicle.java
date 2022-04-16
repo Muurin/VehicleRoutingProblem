@@ -60,7 +60,6 @@ public class Vehicle {
 	}
 
 	public void resetPath() {
-
 		vehiclePath.clear();
 		currentTime = 0;
 		currentDistance = 0;

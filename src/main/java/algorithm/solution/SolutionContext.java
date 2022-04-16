@@ -60,7 +60,6 @@ public class SolutionContext {
 
     public void reset() {
         servicedCustomers.clear();
-        customers.forEach((key, value) -> value.reset());
         vehicles.clear();
     }
 
