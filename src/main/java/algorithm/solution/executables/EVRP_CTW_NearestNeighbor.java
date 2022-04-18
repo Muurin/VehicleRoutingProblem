@@ -1,9 +1,9 @@
 package algorithm.solution.executables;
 
-import InstanceLoaders.EVRP_CTWInstanceLoader;
-import InstanceLoaders.InstanceLoader;
-import Instances.Instance;
-import algorithm.NearestNeighbor.NearestNeighbor;
+import instanceLoaders.EVRP_CTWInstanceLoader;
+import instanceLoaders.InstanceLoader;
+import instances.Instance;
+import algorithm.nearestNeighbor.NearestNeighbor;
 import algorithm.solution.SolutionContext;
 import algorithm.solution.VRPInstancePaths;
 import algorithm.solution.evaluators.SimpleDistanceEvaluator;

@@ -1,0 +1,13 @@
+package instances.Properties;
+
+public enum InstancePropertyType {
+	HOMOGENOUS_FLEET,
+	HETEROGENOUS_FLEET,
+	TIME_WINDOWS,
+	ELECTRIC_VEHICLE,
+	NON_LINEAR_CHARGING,
+	LINEAR_CHARGING,
+	CAPACITATED
+
+
+}

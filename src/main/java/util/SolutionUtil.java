@@ -1,6 +1,6 @@
 package util;
 
-import Model.Location;
+import model.Location;
 import algorithm.solution.SolutionContext;
 
 import java.util.*;

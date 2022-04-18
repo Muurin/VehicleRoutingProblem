@@ -1,11 +1,11 @@
 package algorithm.paths;
 
-import Instances.Properties.LocationProperty;
-import Instances.Properties.LocationPropertyType;
-import Instances.Properties.VehiclePropertyType;
-import Model.Enum.LocationType;
-import Model.Location;
-import Model.Vehicle;
+import instances.Properties.LocationProperty;
+import instances.Properties.LocationPropertyType;
+import instances.Properties.VehiclePropertyType;
+import model.Enum.LocationType;
+import model.Location;
+import model.Vehicle;
 import lombok.*;
 import util.MathUtil;
 import util.PropertiesUtil;

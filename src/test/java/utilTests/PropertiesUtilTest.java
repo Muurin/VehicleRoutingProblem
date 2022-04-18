@@ -1,8 +1,8 @@
 package utilTests;
 
 
-import Instances.Properties.Property;
-import Instances.Properties.PropertyKey;
+import instances.Properties.Property;
+import instances.Properties.PropertyKey;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import util.PropertiesUtil;

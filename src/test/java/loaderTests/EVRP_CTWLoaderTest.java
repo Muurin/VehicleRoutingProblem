@@ -1,12 +1,13 @@
 package loaderTests;
 
-import InstanceLoaders.EVRP_CTWInstanceLoader;
-import InstanceLoaders.InstanceLoader;
-import Instances.Instance;
+import instanceLoaders.EVRP_CTWInstanceLoader;
+import instanceLoaders.InstanceLoader;
+import instances.Instance;
 
-import Instances.Properties.VehiclePropertyType;
-import Model.Vehicle;
+import instances.Properties.VehiclePropertyType;
+import model.Vehicle;
 import algorithm.solution.SolutionContext;
+import algorithm.solution.SolutionContextFactory;
 import algorithm.solution.VRPInstancePaths;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +29,9 @@ public class EVRP_CTWLoaderTest {
 
 		Assertions.assertEquals(122,instance.getLocations().size());
 
-		SolutionContext solutionContext=new SolutionContext(instance);
+		SolutionContextFactory solutionContextFactory = new SolutionContextFactory(instance);
+		SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
+
 		Assertions.assertEquals(21,solutionContext.getChargingStations().size());
 		Assertions.assertEquals(100,solutionContext.getCustomers().size());
 

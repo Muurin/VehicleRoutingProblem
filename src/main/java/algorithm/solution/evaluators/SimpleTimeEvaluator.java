@@ -1,6 +1,6 @@
 package algorithm.solution.evaluators;
 
-import Model.Vehicle;
+import model.Vehicle;
 import algorithm.solution.SolutionContext;
 
 public class SimpleTimeEvaluator implements SolutionEvaluator{

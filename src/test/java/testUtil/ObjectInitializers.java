@@ -1,10 +1,10 @@
 package testUtil;
 
-import Instances.Properties.*;
-import Model.Enum.LocationType;
-import Model.Location;
-import Model.Vehicle;
-import Model.VehicleFactory;
+import instances.Properties.*;
+import model.Enum.LocationType;
+import model.Location;
+import model.Vehicle;
+import model.VehicleFactory;
 import algorithm.solution.SolutionContext;
 import util.CartesianCoordinates;
 

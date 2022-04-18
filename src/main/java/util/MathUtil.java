@@ -1,6 +1,6 @@
 package util;
 
-import Model.Location;
+import model.Location;
 
 public class MathUtil {
 

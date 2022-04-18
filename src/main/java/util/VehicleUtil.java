@@ -1,10 +1,10 @@
 package util;
 
-import Instances.Properties.LocationPropertyType;
-import Instances.Properties.VehiclePropertyType;
-import Model.Enum.LocationType;
-import Model.Location;
-import Model.Vehicle;
+import instances.Properties.LocationPropertyType;
+import instances.Properties.VehiclePropertyType;
+import model.Enum.LocationType;
+import model.Location;
+import model.Vehicle;
 import algorithm.paths.Route;
 import algorithm.solution.SolutionContext;
 

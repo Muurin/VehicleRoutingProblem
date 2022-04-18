@@ -1,7 +1,7 @@
 package util;
 
-import Instances.Properties.Property;
-import Instances.Properties.PropertyKey;
+import instances.Properties.Property;
+import instances.Properties.PropertyKey;
 
 public class PropertiesUtil {
 

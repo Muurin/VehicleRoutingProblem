@@ -1,12 +1,12 @@
 package utilTests;
 
-import Instances.Properties.LocationProperty;
-import Instances.Properties.LocationPropertyType;
-import Instances.Properties.PropertyKey;
-import Instances.Properties.VehiclePropertyType;
-import Model.Enum.LocationType;
-import Model.Location;
-import Model.Vehicle;
+import instances.Properties.LocationProperty;
+import instances.Properties.LocationPropertyType;
+import instances.Properties.PropertyKey;
+import instances.Properties.VehiclePropertyType;
+import model.Enum.LocationType;
+import model.Location;
+import model.Vehicle;
 import algorithm.solution.SolutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
