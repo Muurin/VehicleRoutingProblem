@@ -5,4 +5,6 @@ import algorithm.geneticAlgorithm.model.Population;
 public interface ConvergenceChecker {
 
     boolean isConverging(Population population);
+
+    ConvergenceChecker deepCopy();
 }

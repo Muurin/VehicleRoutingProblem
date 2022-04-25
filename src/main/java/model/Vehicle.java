@@ -42,8 +42,8 @@ public class Vehicle {
 		currentLoad -= vehiclePath.peek().getLoadTransferred();
 	}
 
-	public void travelTo(Location location) {
-		Route route = new Route(getCurrentLocation(), location, this);
+	public void travelTo(Location destination) {
+		Route route = new Route(getCurrentLocation(), destination, this);
 		addRoute(route);
 	}
 

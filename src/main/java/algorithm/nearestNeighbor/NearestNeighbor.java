@@ -37,26 +37,20 @@ public class NearestNeighbor {
 		SolutionContextFactory solutionContextFactory = new SolutionContextFactory(instance);
 		SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
 
-		for(Location startLocation : solutionContext.getCustomers().values()){
-			solutionContext.reset();
-			System.out.println("Pocetna lokacija"+startLocation.getId());
 			while (SolutionUtil.anyCustomersInNeedOfService(solutionContext)) {
 
 				Vehicle currentVehicle = solutionContext.addVehicle();
 				VehicleUtil.initializeDepot(currentVehicle);
 				Location depot= solutionContext.getDepots().get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.ARRIVAL_LOCATION)));
-				log("Novi auto");
-				log("Posluzeno je " +solutionContext.getServicedCustomers().size() +" customera");
-//				Location nextLocation = SolutionUtil.getRandomLocation(solutionContext.getCustomers().values());
-				Location nextLocation = startLocation;
+
+				Location nextLocation = SolutionUtil.getRandomLocation(solutionContext.getCustomers().values());
 				//service customers
+
 				while(!nextLocation.equals(depot)){
 
 					if(!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle,nextLocation)){
 						nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,nextLocation);
 					}
-	//				log(currentVehicle.getCurrentFuel());
-					log("Prema " + nextLocation.getId());
 					currentVehicle.travelTo(nextLocation);
 
 					nextLocation = VehicleUtil.getClosestReachableAndServiceableCustomer(currentVehicle,solutionContext);
@@ -69,32 +63,21 @@ public class NearestNeighbor {
 					}
 
 				}
-				log("Vraćanje doma");
 
 				//return to depot
 				while(!currentVehicle.getCurrentLocation().equals(depot)){
 
-					log("Prema depotu");
 					if(!VehicleUtil.canReachLocation(currentVehicle,depot)){
 
 						nextLocation=VehicleUtil.chooseIntermediateChargingStation(currentVehicle,depot);
 					}else {
 						nextLocation=depot;
 					}
-					Thread.sleep(1000);
-					log("Next loc je"+nextLocation.getCartesianCoordinates());
-					log("Do next loc mi treba " + VehicleUtil.requiredFuel(currentVehicle,currentVehicle.getCurrentLocation(),nextLocation)+" a imam "+ currentVehicle.getCurrentFuel());
 					currentVehicle.travelTo(nextLocation);
 				}
 			}
-//			System.out.println("Gotova iteracija");
-		}
-		System.out.println("Gotovo");
-		return solutionContext;
-	}
 
-	private void log(String message){
-		if(log)System.out.println(message);
+		return solutionContext;
 	}
 
 }

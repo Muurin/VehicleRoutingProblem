@@ -8,6 +8,4 @@ public enum InstancePropertyType {
 	NON_LINEAR_CHARGING,
 	LINEAR_CHARGING,
 	CAPACITATED
-
-
 }
