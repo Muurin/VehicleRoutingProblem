@@ -79,9 +79,6 @@ public class GAChromosomeFactory {
 
     private SolutionContext extendSolutionWithChargingStations(List<Allele> alleles) {
 
-        Location startingLocation;
-        Location destination = null;
-
         SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
 
         for (Allele allele : alleles) {
@@ -90,10 +87,10 @@ public class GAChromosomeFactory {
             Vehicle currentVehicle = !solutionContext.getVehicles().containsKey(vehicleId) ?
                     solutionContext.addVehicleSpecificId(vehicleId) : solutionContext.getVehicles().get(vehicleId);
 
-            if (destination == null) {
-                startingLocation = destination = allele.getLocation();
-                currentVehicle.addRoute(new Route(startingLocation, destination, currentVehicle));
+            if (currentVehicle.getVehiclePath().isEmpty()) {
 
+            }else{
+                currentVehicleLocation.put(vehicleId,allele.getLocation());
             }
 
             startingLocation = currentVehicle.getCurrentLocation();

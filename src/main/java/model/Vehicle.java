@@ -1,11 +1,15 @@
 package model;
 
 
+import instances.Properties.LocationProperty;
+import instances.Properties.LocationPropertyType;
 import instances.Properties.VehicleProperty;
 import instances.Properties.VehiclePropertyType;
 import algorithm.paths.Route;
 import algorithm.solution.SolutionContext;
 import lombok.*;
+import model.Enum.LocationType;
+import util.MathUtil;
 import util.PropertiesUtil;
 
 import java.util.HashMap;
@@ -34,35 +38,46 @@ public class Vehicle {
 	@Builder.Default
 	private Stack<Route> vehiclePath = new Stack<>();
 
-	public void addRoute(Route route) {
+	private void addRoute(Route route) {
 		vehiclePath.add(route);
-		currentFuel -= vehiclePath.peek().getFuelSpent();
+
+		double timeSpent = PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.AVERAGE_VELOCITY))
+				/ route.getDistanceTravelled();
+
+		double fuelSpent = PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.FUEL_CONSUMPTION_RATE)) * route.getDistanceTravelled();
+
+		//currently unloading time is constant and does not depend on load size, this assumes that customers and not visited after being fully serviced
+		if (route.getDestinationLocation().getLocationType() == LocationType.CUSTOMER_LOCATION) {
+
+			LocationProperty demandProperty = route.getDestinationLocation().getLocationProperties().get(LocationPropertyType.DEMAND);
+
+			double demand = PropertiesUtil.getDoublePropertyValue(demandProperty);
+
+			if(currentLoad >= demand){
+
+				if (route.getDestinationLocation().getLocationProperties().containsKey(LocationPropertyType.SERVICE_TIME)) {
+					timeSpent += PropertiesUtil.getDoublePropertyValue(route.getDestinationLocation().getLocationProperties().get(LocationPropertyType.SERVICE_TIME));
+				}
+
+				currentLoad = currentLoad - demand;
+
+				solutionContext.getServicedCustomers().put(route.getDestinationLocation().getId(),route.getDestinationLocation());
+
+			}
+
+		} else if (route.getDestinationLocation().getLocationType() == LocationType.RECHARGING_STATION) {
+			timeSpent += refuel();
+		}
+
+		currentFuel -= fuelSpent;
 		currentDistance += vehiclePath.peek().getDistanceTravelled();
-		currentTime += vehiclePath.peek().getTimeSpent();
-		currentLoad -= vehiclePath.peek().getLoadTransferred();
+		currentTime += timeSpent;
+
 	}
 
 	public void travelTo(Location destination) {
-		Route route = new Route(getCurrentLocation(), destination, this);
+		Route route = new Route(getCurrentLocation(), destination);
 		addRoute(route);
-	}
-
-	public Route removeLastRoute() {
-		currentFuel += vehiclePath.peek().getFuelSpent();
-		currentDistance -= vehiclePath.peek().getDistanceTravelled();
-		currentTime -= vehiclePath.peek().getTimeSpent();
-		currentLoad += vehiclePath.peek().getLoadTransferred();
-		return vehiclePath.pop();
-	}
-
-	public Route checkLastRoute() {
-		return vehiclePath.peek();
-	}
-
-	public void resetPath() {
-		vehiclePath.clear();
-		currentTime = 0;
-		currentDistance = 0;
 	}
 
 	//full recharge
@@ -73,13 +88,16 @@ public class Vehicle {
 				* PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.INVERSE_REFUELING_RATE));
 	}
 
-	//TODO implement heuristic for charging -check for fueling/charging rate or function
-	public double refuel(Object object) {
-		return 0;
+	public Location getCurrentLocation() {
+		if(vehiclePath.isEmpty()){
+			return getDepot();
+		}
+		return vehiclePath.peek().getDestinationLocation();
 	}
 
-	public Location getCurrentLocation() {
-		return vehiclePath.peek().getDestinationLocation();
+	private Location getDepot() {
+		return solutionContext.getDepots().get(PropertiesUtil.getStringPropertyValue(vehiclePropertyMap.get(VehiclePropertyType.DEPARTURE_LOCATION)));
+
 	}
 
 

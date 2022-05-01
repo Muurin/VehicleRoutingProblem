@@ -40,7 +40,6 @@ public class VehicleFactory {
                 .currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
                 .currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
                 .build();
-        VehicleUtil.initializeDepot(vehicle);
         latestId += 1;
         return vehicle;
     }
@@ -55,7 +54,6 @@ public class VehicleFactory {
                     .currentLoad(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)))
                     .currentFuel(PropertiesUtil.getDoublePropertyValue(vehicleProperties.get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)))
                     .build();
-            VehicleUtil.initializeDepot(vehicle);
             latestId += 1;
             return vehicle;
         }
