@@ -1,7 +1,11 @@
 package util;
 
+import algorithm.geneticAlgorithm.model.Allele;
+import algorithm.paths.Route;
+import algorithm.solution.SolutionContextFactory;
 import model.Location;
 import algorithm.solution.SolutionContext;
+import model.Vehicle;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,5 +29,33 @@ public class SolutionUtil {
 		List<Location> locationList = new ArrayList<>(locations);
 		return locationList.get((int) (Math.random() * locationList.size()));
 	}
+
+	public static SolutionContext extendSolutionWithChargingStations(SolutionContextFactory solutionContextFactory, List<Allele> alleles) {
+
+		SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
+		//for each location
+		for (Allele allele : alleles) {
+
+			Long vehicleId = Math.round(allele.getWeight());
+			//determine vehicle
+			Vehicle currentVehicle = !solutionContext.getVehicles().containsKey(vehicleId) ?
+					solutionContext.addVehicleSpecificId(vehicleId) : solutionContext.getVehicles().get(vehicleId);
+			//current vehicle hasnt travelled yet
+
+			if (currentVehicle.getVehiclePath().isEmpty()) {
+				currentVehicle.travelTo(allele.getLocation());
+			} else {
+				Location destination = allele.getLocation();
+				while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
+					Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+					currentVehicle.travelTo(chargingStation);
+				}
+				currentVehicle.travelTo(destination);
+			}
+		}
+
+		return solutionContext;
+	}
+
 
 }

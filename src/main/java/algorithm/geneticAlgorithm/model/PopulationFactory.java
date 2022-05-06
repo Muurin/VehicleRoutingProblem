@@ -20,7 +20,7 @@ public class PopulationFactory {
         }
         population.setSize(size);
 
-        population.setLowestInverseFitness(Objects.requireNonNull(individuals.pollFirst()).getInverseFitness());
+        population.setLowestInverseFitness(Objects.requireNonNull(individuals.pollFirst()).getCostValue());
 
         return population;
     }
@@ -40,7 +40,7 @@ public class PopulationFactory {
 
         newPopulation.setIndividuals(individuals);
         newPopulation.setSize(size);
-        newPopulation.setLowestInverseFitness(Objects.requireNonNull(individuals.pollFirst()).getInverseFitness());
+        newPopulation.setLowestInverseFitness(Objects.requireNonNull(individuals.pollFirst()).getCostValue());
 
         return newPopulation;
 
@@ -64,7 +64,7 @@ public class PopulationFactory {
 
         newPopulation.setIndividuals(newIndividuals);
         newPopulation.setSize(size);
-        newPopulation.setLowestInverseFitness(Objects.requireNonNull(newIndividuals.pollFirst()).getInverseFitness());
+        newPopulation.setLowestInverseFitness(Objects.requireNonNull(newIndividuals.pollFirst()).getCostValue());
 
         return newPopulation;
 

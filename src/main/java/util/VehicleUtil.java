@@ -13,15 +13,6 @@ import java.util.List;
 
 public class VehicleUtil {
 
-	public static void initializeDepot(Vehicle vehicle) {
-		Location depot = vehicle.getSolutionContext().getDepots().get(PropertiesUtil.getStringPropertyValue(vehicle.getVehiclePropertyMap().get(VehiclePropertyType.DEPARTURE_LOCATION)));
-		vehicle.addRoute(Route
-				.builder()
-				.startingLocation(depot)
-				.destinationLocation(depot)
-				.build());
-	}
-
 	public static Location getArrivalLocation(Vehicle vehicle) {
 		return vehicle.getSolutionContext().getDepots().get(PropertiesUtil.getStringPropertyValue(vehicle.getVehiclePropertyMap().get(VehiclePropertyType.ARRIVAL_LOCATION)));
 	}

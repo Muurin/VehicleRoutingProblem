@@ -32,7 +32,6 @@ public class NearestNeighbor {
 	 *
 	 *Problem ako su neki customeri predaleko pa auti zapnu, pretpostavka da toga nema?
 	 */
-	//TODO discover the source of cyclic behviour of vehicle traveling between two customers- shouldn't ever happen (happened for C15 and C16 with visit to C7 every now and then)
 	public SolutionContext start(Instance instance) throws InterruptedException {
 		SolutionContextFactory solutionContextFactory = new SolutionContextFactory(instance);
 		SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
@@ -40,7 +39,6 @@ public class NearestNeighbor {
 			while (SolutionUtil.anyCustomersInNeedOfService(solutionContext)) {
 
 				Vehicle currentVehicle = solutionContext.addVehicle();
-				VehicleUtil.initializeDepot(currentVehicle);
 				Location depot= solutionContext.getDepots().get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.ARRIVAL_LOCATION)));
 
 				Location nextLocation = SolutionUtil.getRandomLocation(solutionContext.getCustomers().values());
@@ -61,7 +59,6 @@ public class NearestNeighbor {
 					else{
 						nextLocation=depot;
 					}
-
 				}
 
 				//return to depot

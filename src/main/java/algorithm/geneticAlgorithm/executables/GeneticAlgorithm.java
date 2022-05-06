@@ -12,6 +12,7 @@ import algorithm.geneticAlgorithm.resultProcessor.CallbackAction;
 import lombok.RequiredArgsConstructor;
 import util.Pair;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,14 +52,15 @@ public class GeneticAlgorithm implements Runnable{
             population = elimination.eliminate(population);
 
             //crossover
-            List<GAChromosome> offspring = new LinkedList<>();
+            Collection<GAChromosome> offspring = new LinkedList<>();
             for (Pair<GAChromosome> parents : selected) {
                 offspring.addAll(crossover.crossover(parents.getLeft(), parents.getRight()));
+                offspring = mutation.mutate(offspring);
             }
 
             population = populationFactory.supplementPopulationWithIndividuals(population, offspring);
             //mutation
-            population = mutation.mutate(population);
+
 
             //generate more individuals if lacking individuals
             if (!population.isFull()) {
