@@ -35,6 +35,6 @@ public class AggregateConvergenceChecker implements ConvergenceChecker{
     }
 
     protected void groupAction(ConvergenceChecker convergenceChecker, List<ConvergenceChecker> convergenceCheckerList, Population population){
-
     }
+
 }

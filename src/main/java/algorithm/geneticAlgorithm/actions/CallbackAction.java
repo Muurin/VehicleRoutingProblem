@@ -1,4 +1,4 @@
-package algorithm.geneticAlgorithm.resultProcessor;
+package algorithm.geneticAlgorithm.actions;
 
 import algorithm.geneticAlgorithm.model.Population;
 

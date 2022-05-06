@@ -6,7 +6,7 @@ import algorithm.geneticAlgorithm.operators.elimination.Elimination;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 import algorithm.geneticAlgorithm.operators.mutation.Mutation;
 import algorithm.geneticAlgorithm.operators.selection.Selection;
-import algorithm.geneticAlgorithm.resultProcessor.CallbackAction;
+import algorithm.geneticAlgorithm.actions.CallbackAction;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
