@@ -28,4 +28,11 @@ public class GAChromosome implements Comparable<GAChromosome> {
         return chromosome.getAlleles().equals(alleles);
     }
 
+    @Override
+    public String toString() {
+        return "GAChromosome{" +
+                "costValue=" + costValue +
+                ", alleles=" + alleles +
+                '}';
+    }
 }

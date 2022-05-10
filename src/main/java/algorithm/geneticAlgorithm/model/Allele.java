@@ -4,6 +4,8 @@ import model.Location;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Objects;
+
 @Builder
 @Data
 public class Allele {
@@ -18,6 +20,16 @@ public class Allele {
         if (!(o instanceof Allele)) return false;
         Allele allele = (Allele) o;
         return location.equals(allele.getLocation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(location);
+    }
+
+    @Override
+    public String toString(){
+        return location.toString();
     }
 
 }

@@ -1,5 +1,6 @@
 package algorithm.geneticAlgorithm.executables;
 
+import algorithm.geneticAlgorithm.actions.CallbackAction;
 import algorithm.geneticAlgorithm.convergenceChecker.ConvergenceChecker;
 import algorithm.geneticAlgorithm.model.GAChromosome;
 import algorithm.geneticAlgorithm.model.Population;
@@ -8,16 +9,16 @@ import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 import algorithm.geneticAlgorithm.operators.elimination.Elimination;
 import algorithm.geneticAlgorithm.operators.mutation.Mutation;
 import algorithm.geneticAlgorithm.operators.selection.Selection;
-import algorithm.geneticAlgorithm.actions.CallbackAction;
 import lombok.RequiredArgsConstructor;
 import util.Pair;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class GeneticAlgorithm implements Runnable{
+public class GeneticAlgorithm implements Runnable {
 
 
     private final PopulationFactory populationFactory;
@@ -36,13 +37,11 @@ public class GeneticAlgorithm implements Runnable{
 
     int popSize;
 
-    int numberOfVehicles;
-
     @Override
     public void run() {
 
         //initialize population
-        Population population = populationFactory.initPopulation(popSize, numberOfVehicles);
+        Population population = populationFactory.initPopulation(popSize);
         //until convergence do
 
         while (!convergenceChecker.isConverging(population)) {
@@ -54,8 +53,13 @@ public class GeneticAlgorithm implements Runnable{
             //crossover
             Collection<GAChromosome> offspring = new LinkedList<>();
             for (Pair<GAChromosome> parents : selected) {
-                offspring.addAll(crossover.crossover(parents.getLeft(), parents.getRight()));
-                offspring = mutation.mutate(offspring);
+                offspring.addAll(crossover.crossover(parents.getLeft().getAlleles(), parents.getRight().getAlleles())
+                        .stream().map(populationFactory::allelsToChromosome).collect(Collectors.toList()));
+
+                offspring = offspring
+                        .stream()
+                        .map(gaChromosome -> mutation.mutate(gaChromosome.getAlleles()))
+                        .map(populationFactory::allelsToChromosome).collect(Collectors.toList());
             }
 
             population = populationFactory.supplementPopulationWithIndividuals(population, offspring);

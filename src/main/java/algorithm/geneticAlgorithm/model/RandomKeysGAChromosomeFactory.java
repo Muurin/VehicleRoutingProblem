@@ -21,6 +21,8 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
 
+    int numberOfVehicles;
+
     private final SolutionContextFactory solutionContextFactory;
 
     private final SolutionEvaluator solutionEvaluator;
@@ -30,13 +32,13 @@ public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
 
         return GAChromosome
                 .builder()
-                .costValue(solutionEvaluator.evaluate(SolutionUtil.extendSolutionWithChargingStations(solutionContextFactory, alleles)))
+                .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory, alleles)))
                 .alleles(alleles)
                 .build();
     }
 
     @Override
-    public GAChromosome createRandomFeasibleGAChromosome(int numberOfVehicles) {
+    public GAChromosome createRandomFeasibleGAChromosome() {
 
         SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
 
@@ -46,6 +48,7 @@ public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
         double[] randomWeights = new double[customers.size()];
         Location[] locations = new Location[customers.size()];
         Random random = new Random();
+
 
         double[] availableResources = new double[numberOfVehicles];
         Arrays.fill(availableResources, PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.VEHICLE_LOAD_CAPACITY)));
@@ -75,6 +78,38 @@ public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
                 .mapToObj(e -> Allele.builder().location(locations[e]).weight(randomWeights[e]).build()).collect(Collectors.toList());
 
         return createGAChromosome(alleles);
+    }
+
+    @Override
+    public double evaluateChromosome(GAChromosome gaChromosome) {
+        return solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory,gaChromosome.getAlleles()));
+    }
+
+    private SolutionContext extendSolutionWithChargingStations(SolutionContextFactory solutionContextFactory, List<Allele> alleles) {
+
+        SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
+        //for each location
+        for (Allele allele : alleles) {
+
+            Long vehicleId = Math.round(allele.getWeight());
+            //determine vehicle
+            Vehicle currentVehicle = !solutionContext.getVehicles().containsKey(vehicleId) ?
+                    solutionContext.addVehicleSpecificId(vehicleId) : solutionContext.getVehicles().get(vehicleId);
+            //current vehicle hasnt travelled yet
+
+            if (currentVehicle.getVehiclePath().isEmpty()) {
+                currentVehicle.travelTo(allele.getLocation());
+            } else {
+                Location destination = allele.getLocation();
+                while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
+                    Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+                    currentVehicle.travelTo(chargingStation);
+                }
+                currentVehicle.travelTo(destination);
+            }
+        }
+
+        return solutionContext;
     }
 
 

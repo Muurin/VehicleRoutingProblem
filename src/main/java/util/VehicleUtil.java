@@ -38,7 +38,7 @@ public class VehicleUtil {
 	}
 
 	public static Location chooseIntermediateChargingStation(Vehicle vehicle, Location targetLocation) {
-		return vehicle.getSolutionContext().getChargingStations().values().stream().filter(location -> canReachLocation(vehicle,location)).min(Comparator.comparingDouble(o -> intermediateDistance(vehicle.getCurrentLocation(), o, targetLocation))).orElse(null);
+		return vehicle.getSolutionContext().getChargingStations().values().stream().filter(location -> canReachLocationAndNearestChargingStation(vehicle,location)).min(Comparator.comparingDouble(o -> intermediateDistance(vehicle.getCurrentLocation(), o, targetLocation))).orElse(null);
 	}
 
 	private static double intermediateDistance(Location startingLocation, Location intermediateLocation, Location destination) {

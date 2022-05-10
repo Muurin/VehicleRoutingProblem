@@ -1,13 +1,14 @@
 package algorithm.geneticAlgorithm.model;
 
-import algorithm.solution.SolutionContext;
-import algorithm.solution.SolutionContextFactory;
-
+import java.util.Collection;
 import java.util.List;
 
 public interface GAChromosomeFactory {
 
     GAChromosome createGAChromosome(List<Allele> alleles);
 
-    GAChromosome createRandomFeasibleGAChromosome(int numberOfVehicles);
+    GAChromosome createRandomFeasibleGAChromosome();
+
+    double evaluateChromosome(GAChromosome gaChromosome);
+
 }
