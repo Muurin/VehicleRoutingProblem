@@ -3,6 +3,7 @@ package algorithm.geneticAlgorithm.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.TreeSet;
 
 @Getter
@@ -17,8 +18,15 @@ public class Population {
 
     private TreeSet<GAChromosome> individuals = new TreeSet<>();
 
-    public boolean isFull(){
+    public boolean isFull() {
         return size == individuals.size();
+    }
+
+    public void setIndividuals(TreeSet<GAChromosome> individuals) {
+        if (individuals.size() != 0) {
+            lowestInverseFitness = Objects.requireNonNull(individuals.pollFirst()).getCostValue();
+        }
+        this.individuals = individuals;
     }
 
 }
