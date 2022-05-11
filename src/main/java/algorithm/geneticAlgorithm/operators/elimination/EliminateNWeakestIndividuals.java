@@ -4,19 +4,19 @@ import algorithm.geneticAlgorithm.model.Population;
 import lombok.RequiredArgsConstructor;
 
 import java.util.LinkedList;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 
 @RequiredArgsConstructor
-public class EliminateNWeakestIndividuals implements Elimination{
+public class EliminateNWeakestIndividuals implements Elimination {
 
-    private final  int numberOfEliminations;
+    private final int numberOfEliminations;
 
     @Override
     public Population eliminate(Population population) {
-        Population result = new Population();
+        Population result = new Population(population.getSize());
         result.setNumberOfVehicles(population.getNumberOfVehicles());
-        result.setSize(population.getSize());
-        result.setIndividuals(new TreeSet<>(new LinkedList<>(population.getIndividuals()).subList(0, numberOfEliminations < population.getSize() ? population.getSize() - numberOfEliminations:0)));
+        result.setIndividuals(new PriorityQueue<>(new LinkedList<>(population.getIndividuals()).subList(0, numberOfEliminations < population.getIndividuals().size() ?
+                population.getIndividuals().size() - numberOfEliminations : 0)));
         return result;
     }
 }

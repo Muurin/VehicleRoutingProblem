@@ -17,13 +17,13 @@ public class GAChromosome implements Comparable<GAChromosome> {
 
     @Override
     public int compareTo(GAChromosome o) {
-        return -Double.compare(costValue, o.getCostValue());
+        return Double.compare(costValue, o.getCostValue());
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof GAChromosome))return false;
+        if (!(o instanceof GAChromosome)) return false;
         GAChromosome chromosome = (GAChromosome) o;
         return chromosome.getAlleles().equals(alleles);
     }

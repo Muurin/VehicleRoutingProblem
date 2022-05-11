@@ -15,13 +15,13 @@ public class RandomEliminationWithElitism implements Elimination {
 
     @Override
     public Population eliminate(Population population) {
-        Population resultPopulation = new Population();
+        Population resultPopulation = new Population(population.getSize());
 
         if (numberOfEliminations > population.getIndividuals().size()) {
             return resultPopulation;
         }
 
-        TreeSet<GAChromosome> result = new TreeSet<>(new ArrayList<>(population.getIndividuals()).subList(0, eliteIndividuals));
+        PriorityQueue<GAChromosome> result = new PriorityQueue<>(new ArrayList<>(population.getIndividuals()).subList(0, eliteIndividuals));
         List<GAChromosome> eliminationList = new ArrayList<>(new LinkedList<>(population.getIndividuals()).subList(eliteIndividuals, population.getIndividuals().size()));
 
 
@@ -34,7 +34,7 @@ public class RandomEliminationWithElitism implements Elimination {
             }
             eliminationList.remove(r.nextInt(currentMaxIndex--));
         }
-
+        result.addAll(eliminationList);
         resultPopulation.setIndividuals(result);
         return resultPopulation;
     }

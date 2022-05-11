@@ -12,4 +12,9 @@ public class Pair<T> {
     private T left;
     private T right;
 
+    @Override
+    public String toString(){
+        return "{" + left.toString() + ", " +right.toString() + "}";
+    }
+
 }

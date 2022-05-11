@@ -1,30 +1,32 @@
 package algorithm.geneticAlgorithm.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Population {
 
-    private int size;
+    private final int size;
 
     private int numberOfVehicles;
 
     private double lowestInverseFitness;
 
-    private TreeSet<GAChromosome> individuals = new TreeSet<>();
+    private PriorityQueue<GAChromosome> individuals = new PriorityQueue<>();
 
     public boolean isFull() {
         return size == individuals.size();
     }
 
-    public void setIndividuals(TreeSet<GAChromosome> individuals) {
+    public void setIndividuals(PriorityQueue<GAChromosome> individuals) {
         if (individuals.size() != 0) {
-            lowestInverseFitness = Objects.requireNonNull(individuals.pollFirst()).getCostValue();
+            lowestInverseFitness = Objects.requireNonNull(individuals.peek()).getCostValue();
         }
         this.individuals = individuals;
     }
