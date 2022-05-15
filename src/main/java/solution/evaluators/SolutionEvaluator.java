@@ -1,6 +1,6 @@
-package algorithm.solution.evaluators;
+package solution.evaluators;
 
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 
 public interface SolutionEvaluator {
 

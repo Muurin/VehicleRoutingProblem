@@ -6,9 +6,9 @@ import instances.Instance;
 
 import instances.Properties.VehiclePropertyType;
 import model.Vehicle;
-import algorithm.solution.SolutionContext;
-import algorithm.solution.SolutionContextFactory;
-import algorithm.solution.VRPInstancePaths;
+import solution.SolutionContext;
+import solution.SolutionContextFactory;
+import solution.VRPInstancePaths;
 import org.jdom2.JDOMException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

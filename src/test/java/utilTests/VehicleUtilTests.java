@@ -7,7 +7,7 @@ import instances.Properties.VehiclePropertyType;
 import model.Enum.LocationType;
 import model.Location;
 import model.Vehicle;
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import testUtil.ObjectInitializers;

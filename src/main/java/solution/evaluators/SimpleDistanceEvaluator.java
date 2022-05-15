@@ -1,7 +1,7 @@
-package algorithm.solution.evaluators;
+package solution.evaluators;
 
 import model.Vehicle;
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 
 public class SimpleDistanceEvaluator implements SolutionEvaluator{
 

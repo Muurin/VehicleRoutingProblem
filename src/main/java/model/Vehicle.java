@@ -5,11 +5,10 @@ import instances.Properties.LocationProperty;
 import instances.Properties.LocationPropertyType;
 import instances.Properties.VehicleProperty;
 import instances.Properties.VehiclePropertyType;
-import algorithm.paths.Route;
-import algorithm.solution.SolutionContext;
+import model.paths.Route;
+import solution.SolutionContext;
 import lombok.*;
 import model.Enum.LocationType;
-import util.MathUtil;
 import util.PropertiesUtil;
 
 import java.util.HashMap;

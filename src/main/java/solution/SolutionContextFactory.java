@@ -1,4 +1,4 @@
-package algorithm.solution;
+package solution;
 
 import instances.Instance;
 import model.Location;

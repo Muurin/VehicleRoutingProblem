@@ -2,9 +2,8 @@ package model;
 
 import instances.Properties.VehicleProperty;
 import instances.Properties.VehiclePropertyType;
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 import util.PropertiesUtil;
-import util.VehicleUtil;
 
 import java.util.HashMap;
 import java.util.Map;

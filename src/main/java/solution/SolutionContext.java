@@ -1,4 +1,4 @@
-package algorithm.solution;
+package solution;
 
 import instances.Properties.InstanceProperty;
 import model.Location;

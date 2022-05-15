@@ -1,8 +1,8 @@
 package temp;
 
-import algorithm.solution.SolutionContext;
-import algorithm.solution.SolutionContextFactory;
-import algorithm.solution.VRPInstancePaths;
+import solution.SolutionContext;
+import solution.SolutionContextFactory;
+import solution.VRPInstancePaths;
 import instanceLoaders.EVRP_CTWInstanceLoader;
 import instanceLoaders.InstanceLoader;
 import instances.Instance;

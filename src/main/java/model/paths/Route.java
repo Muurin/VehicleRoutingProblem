@@ -1,4 +1,4 @@
-package algorithm.paths;
+package model.paths;
 
 import instances.Properties.LocationProperty;
 import instances.Properties.LocationPropertyType;

@@ -1,11 +1,7 @@
 package util;
 
-import algorithm.geneticAlgorithm.model.Allele;
-import algorithm.paths.Route;
-import algorithm.solution.SolutionContextFactory;
 import model.Location;
-import algorithm.solution.SolutionContext;
-import model.Vehicle;
+import solution.SolutionContext;
 
 import java.util.*;
 import java.util.stream.Collectors;

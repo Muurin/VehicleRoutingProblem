@@ -5,8 +5,7 @@ import instances.Properties.VehiclePropertyType;
 import model.Enum.LocationType;
 import model.Location;
 import model.Vehicle;
-import algorithm.paths.Route;
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 
 import java.util.Comparator;
 import java.util.List;

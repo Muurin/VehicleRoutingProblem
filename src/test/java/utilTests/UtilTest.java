@@ -1,6 +1,6 @@
 package utilTests;
 
-import algorithm.solution.SolutionContext;
+import solution.SolutionContext;
 import org.junit.jupiter.api.Test;
 import testUtil.ObjectInitializers;
 

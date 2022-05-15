@@ -1,10 +1,9 @@
 package algorithm.geneticAlgorithm.model;
 
-import algorithm.solution.SolutionContext;
-import algorithm.solution.SolutionContextFactory;
-import algorithm.solution.evaluators.SolutionEvaluator;
+import solution.SolutionContext;
+import solution.SolutionContextFactory;
+import solution.evaluators.SolutionEvaluator;
 import instances.Properties.VehiclePropertyType;
-import lombok.RequiredArgsConstructor;
 import model.Location;
 import model.Vehicle;
 import util.PropertiesUtil;

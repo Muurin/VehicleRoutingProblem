@@ -1,4 +1,4 @@
-package algorithm.solution;
+package solution;
 
 public class VRPInstancePaths {
 
