@@ -45,7 +45,7 @@ public class Vehicle {
 				/ route.getDistanceTravelled();
 
 		double fuelSpent = PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.FUEL_CONSUMPTION_RATE)) * route.getDistanceTravelled();
-
+		currentFuel -= fuelSpent;
 		//currently unloading time is constant and does not depend on load size, this assumes that customers and not visited after being fully serviced
 		if (route.getDestinationLocation().getLocationType() == LocationType.CUSTOMER_LOCATION) {
 
@@ -69,7 +69,6 @@ public class Vehicle {
 			timeSpent += refuel();
 		}
 
-		currentFuel -= fuelSpent;
 		currentDistance += vehiclePath.peek().getDistanceTravelled();
 		currentTime += timeSpent;
 

@@ -3,7 +3,6 @@ package algorithm.geneticAlgorithm.operators.mutation;
 import algorithm.geneticAlgorithm.model.Allele;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.List;
 public class AggregateEqualChanceMutation implements Mutation {
 
     private final List<Mutation> mutations;
-
 
     @Override
     public List<Allele> mutate(List<Allele> alleles) {

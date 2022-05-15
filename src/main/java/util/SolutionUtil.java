@@ -21,6 +21,10 @@ public class SolutionUtil {
 		return locations.stream().filter(location -> !visited.containsKey(location.getId())&& !location.getId().equals(currentLocation.getId())).min(Comparator.comparingDouble(o -> MathUtil.getEuclideanDistanceTo(o, currentLocation))).orElse(null);
 	}
 
+	public static Location findNearestLocationFromSet(Collection<Location> locations, Location currentLocation){
+		return locations.stream().filter(location -> !location.getId().equals(currentLocation.getId())).min(Comparator.comparingDouble(o -> MathUtil.getEuclideanDistanceTo(o, currentLocation))).orElse(null);
+	}
+
 	public static boolean anyCustomersInNeedOfService(SolutionContext solutionContext) {
 		return solutionContext.getCustomers().size() == solutionContext.getServicedCustomers().size();
 	}

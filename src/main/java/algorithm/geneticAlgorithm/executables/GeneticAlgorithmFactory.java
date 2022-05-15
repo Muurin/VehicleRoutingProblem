@@ -26,9 +26,9 @@ public class GeneticAlgorithmFactory {
 
     private final CallbackAction callbackAction;
 
-    public void start(int nthread, int popSize, int numberOfVehicles) throws InterruptedException {
+    public void start(int nthread, int popSize) throws InterruptedException {
 
-        for(int i = 0;i<nthread;i++){
+        for (int i = 0; i < nthread; i++) {
             Thread thread = new Thread(new GeneticAlgorithm(
                     populationFactory,
                     crossover,
@@ -36,9 +36,8 @@ public class GeneticAlgorithmFactory {
                     selection,
                     elimination,
                     convergenceChecker.deepCopy(),
-                    callbackAction));
+                    callbackAction, popSize));
             thread.start();
-            thread.join();
         }
 
     }

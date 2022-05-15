@@ -3,6 +3,7 @@ package algorithm.geneticAlgorithm.operators.mutation;
 import algorithm.geneticAlgorithm.model.Allele;
 import lombok.RequiredArgsConstructor;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,14 +14,16 @@ public class CyclicMutation implements Mutation {
 
     private final double mutationChance;
 
+    private final Random r = new Random();
+
     @Override
     public List<Allele> mutate(List<Allele> alleles) {
-        Random r = new Random();
+
         if (r.nextDouble() > mutationChance) {
             return alleles;
         }
 
-        List<Allele> mutated = alleles.subList(alleles.size() - (shift % alleles.size()), alleles.size());
+        List<Allele> mutated = new LinkedList<>(alleles.subList(alleles.size() - (shift % alleles.size()), alleles.size()));
 
         mutated.addAll(alleles.subList(0, alleles.size() - (shift % alleles.size())));
         return mutated;

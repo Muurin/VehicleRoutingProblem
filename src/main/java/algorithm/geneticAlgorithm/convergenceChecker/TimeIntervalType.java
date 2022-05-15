@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum TimeIntervalType {
     MILLISECOND(1),
-    SECOND(60),
-    MINUTE(3600),
-    HOUR(216000);
+    SECOND(1000),
+    MINUTE(60000),
+    HOUR(3600000);
 
     private final double scalar;
 

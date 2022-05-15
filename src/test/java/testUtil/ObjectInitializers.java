@@ -96,6 +96,8 @@ public class ObjectInitializers {
 		customers.put("4",Location.builder().locationType(LocationType.CUSTOMER_LOCATION).id("4").cartesianCoordinates(CartesianCoordinates.builder().y(1.0).x(1.0).build()).build());
 		customers.put("5",Location.builder().locationType(LocationType.CUSTOMER_LOCATION).id("5").cartesianCoordinates(CartesianCoordinates.builder().y(2.0).x(3.0).build()).build());
 		customers.put("9",Location.builder().locationType(LocationType.CUSTOMER_LOCATION).id("9").cartesianCoordinates(CartesianCoordinates.builder().y(-1.0).x(-1.0).build()).build());
+		customers.put("9",Location.builder().locationType(LocationType.CUSTOMER_LOCATION).id("9").cartesianCoordinates(CartesianCoordinates.builder().y(-1.0).x(-1.0).build()).build());
+		customers.put("9",Location.builder().locationType(LocationType.CUSTOMER_LOCATION).id("9").cartesianCoordinates(CartesianCoordinates.builder().y(-1.0).x(-1.0).build()).build());
 
 		for(Location location :customers.values()) {
 

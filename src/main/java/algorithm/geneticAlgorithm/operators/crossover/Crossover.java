@@ -1,7 +1,6 @@
 package algorithm.geneticAlgorithm.operators.crossover;
 
 import algorithm.geneticAlgorithm.model.Allele;
-import algorithm.geneticAlgorithm.model.GAChromosome;
 
 import java.util.Collection;
 import java.util.List;

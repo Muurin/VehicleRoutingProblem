@@ -7,6 +7,6 @@ public class VRPInstancePaths {
 	}
 
 	public static String getEVRP_CTWPath2(){
-		return "/Users/marinovcaricek/Downloads/evrptw_instances/c101_21.txt";
+		return "/Users/marinovcaricek/Diplomski rad/evrptw_instances/c101_21.txt";
 	}
 }

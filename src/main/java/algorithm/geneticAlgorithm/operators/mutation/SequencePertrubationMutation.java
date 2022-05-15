@@ -13,9 +13,11 @@ public class SequencePertrubationMutation implements Mutation {
 
     private final double mutationChance;
 
+    private final Random r = new Random();
+
+
     @Override
     public List<Allele> mutate(List<Allele> alleles) {
-        Random r = new Random();
         if (r.nextDouble() > mutationChance) {
             return alleles;
         }

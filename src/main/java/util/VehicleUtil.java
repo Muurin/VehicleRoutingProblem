@@ -29,8 +29,15 @@ public class VehicleUtil {
 	}
 
 	public static boolean canReachLocationAndNearestChargingStation(Vehicle vehicle, Location targetLocation) {
+
+
+		if(targetLocation.getLocationType().equals(LocationType.RECHARGING_STATION)){
+			return vehicle.getCurrentFuel() >= requiredFuel(vehicle, vehicle.getCurrentLocation(), targetLocation)
+			&& PropertiesUtil.getDoublePropertyValue(vehicle.getVehiclePropertyMap().get(VehiclePropertyType.VEHICLE_FUEL_TANK_CAPACITY)) >=
+					requiredFuel(vehicle, targetLocation, SolutionUtil.findNearestLocationFromSet(vehicle.getSolutionContext().getChargingStations().values(), targetLocation));
+		}
 		return vehicle.getCurrentFuel() >= requiredFuel(vehicle, vehicle.getCurrentLocation(), targetLocation)
-				+ requiredFuel(vehicle, targetLocation, SolutionUtil.findNearestLocationFromNotVisited(vehicle.getSolutionContext().getChargingStations().values(), targetLocation, vehicle.getSolutionContext().getServicedCustomers()));
+				+ requiredFuel(vehicle, targetLocation, SolutionUtil.findNearestLocationFromSet(vehicle.getSolutionContext().getChargingStations().values(), targetLocation));
 	}
 
 	public static boolean canReachLocation(Vehicle vehicle, Location targetLocation){
@@ -38,7 +45,10 @@ public class VehicleUtil {
 	}
 
 	public static Location chooseIntermediateChargingStation(Vehicle vehicle, Location targetLocation) {
-		return vehicle.getSolutionContext().getChargingStations().values().stream().filter(location -> canReachLocationAndNearestChargingStation(vehicle,location)).min(Comparator.comparingDouble(o -> intermediateDistance(vehicle.getCurrentLocation(), o, targetLocation))).orElse(null);
+		return vehicle.getSolutionContext().getChargingStations().values().stream()
+				.filter(location -> canReachLocationAndNearestChargingStation(vehicle,location))
+				.min(Comparator.comparingDouble(o ->  MathUtil.getEuclideanDistanceTo(o,targetLocation)))
+				.orElse(null);
 	}
 
 	private static double intermediateDistance(Location startingLocation, Location intermediateLocation, Location destination) {

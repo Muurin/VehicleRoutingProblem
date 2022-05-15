@@ -16,6 +16,7 @@ import algorithm.geneticAlgorithm.operators.selection.Selection;
 import algorithm.geneticAlgorithm.operators.selection.TournamentSelection;
 import algorithm.solution.SolutionContextFactory;
 import algorithm.solution.evaluators.SimpleDistanceEvaluator;
+import model.Location;
 import testUtil.ObjectInitializers;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class Proba {
 
     public static void main(String[] args) {
 
-//        FileWriterUtil.writeToNewOrExistingFile(DIR,"proba.txt", "nsgbuabgou;bg;ag;ahgiah");
-//        FileWriterUtil.writeToNewOrExistingFile(DIR,"proba.txt", "nsSADA BIH LMAO giah");
+        //        FileWriterUtil.writeToNewOrExistingFile(DIR,"proba.txt", "nsgbuabgou;bg;ag;ahgiah");
+        //        FileWriterUtil.writeToNewOrExistingFile(DIR,"proba.txt", "nsSADA BIH LMAO giah");
 
         PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(ObjectInitializers.givenInstanceExample1()), new SimpleDistanceEvaluator());
         Crossover crossover = new MOC();
@@ -48,7 +49,7 @@ public class Proba {
         GAChromosome gaChromosome8 = gaChromosomeFactory.createRandomFeasibleGAChromosome();
 
         Population population = new Population(8);
-        population.setIndividuals(new PriorityQueue<>(List.of(gaChromosome1, gaChromosome2, gaChromosome3, gaChromosome4,gaChromosome5, gaChromosome6, gaChromosome7, gaChromosome8)));
+        population.setIndividuals(new PriorityQueue<>(List.of(gaChromosome1, gaChromosome2, gaChromosome3, gaChromosome4, gaChromosome5, gaChromosome6, gaChromosome7, gaChromosome8)));
 
         System.out.println(gaChromosome1);
         System.out.println(gaChromosome2);
@@ -58,27 +59,29 @@ public class Proba {
         System.out.println(gaChromosome6);
         System.out.println(gaChromosome7);
         System.out.println(gaChromosome8);
-//        System.out.println(population.getIndividuals());
+        //        System.out.println(population.getIndividuals());
 
-//        Elimination elimination = new RandomEliminationWithElitism(2,6);
-                //new EliminateNWeakestIndividuals(2);
-//        population = elimination.eliminate(population);
-        Selection selection = new TournamentSelection(3,5);
+        //        Elimination elimination = new RandomEliminationWithElitism(2,6);
+        //new EliminateNWeakestIndividuals(2);
+        //        population = elimination.eliminate(population);
+        Selection selection = new TournamentSelection(3, 5);
         System.out.println(selection.select(population));
 
 
         System.out.println(population.getIndividuals());
 
-//        System.out.println(mutation.mutate(gaChromosome1.getAlleles()));
+        //        System.out.println(mutation.mutate(gaChromosome1.getAlleles()));
 
-//        System.out.println(mutation1.mutate(gaChromosome2.getAlleles()));
+        //        System.out.println(mutation1.mutate(gaChromosome2.getAlleles()));
 
-//        System.out.println(mutation2.mutate(gaChromosome2.getAlleles()));
+        //        System.out.println(mutation2.mutate(gaChromosome2.getAlleles()));
 
 
-//        for(Collection<Allele> child : crossover.crossover(gaChromosome1.getAlleles(),gaChromosome2.getAlleles())){
-//            System.out.println(child);
-//        }
+        //        for(Collection<Allele> child : crossover.crossover(gaChromosome1.getAlleles(),gaChromosome2.getAlleles())){
+        //            System.out.println(child);
+        //        }
+
+       System.out.println("MOJ ID JE" + Thread.currentThread().getName());
 
     }
 

@@ -2,6 +2,8 @@ package algorithm.geneticAlgorithm.convergenceChecker;
 
 import algorithm.geneticAlgorithm.model.Population;
 
+import java.time.LocalDateTime;
+
 public class TimeConvergenceChecker implements ConvergenceChecker {
 
     private boolean started;

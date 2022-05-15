@@ -35,7 +35,7 @@ public class GeneticAlgorithm implements Runnable {
 
     private final CallbackAction callbackAction;
 
-    int popSize;
+    private final int popSize;
 
     @Override
     public void run() {
@@ -49,13 +49,14 @@ public class GeneticAlgorithm implements Runnable {
             List<Pair<GAChromosome>> selected = selection.select(population);
             //elimination
             population = elimination.eliminate(population);
+            callbackAction.selectionAction(population);
 
             //crossover
             Collection<GAChromosome> offspring = new LinkedList<>();
             for (Pair<GAChromosome> parents : selected) {
                 offspring.addAll(crossover.crossover(parents.getLeft().getAlleles(), parents.getRight().getAlleles())
                         .stream().map(populationFactory::allelsToChromosome).collect(Collectors.toList()));
-
+                callbackAction.crossoverAction(population);
                 offspring = offspring
                         .stream()
                         .map(gaChromosome -> mutation.mutate(gaChromosome.getAlleles()))
@@ -70,7 +71,7 @@ public class GeneticAlgorithm implements Runnable {
             if (!population.isFull()) {
                 population = populationFactory.supplementPopulationWithRandomIndividuals(population);
             }
-
+            callbackAction.iterationAction(population);
         }
         //Extract result
         callbackAction.resultAction(population);

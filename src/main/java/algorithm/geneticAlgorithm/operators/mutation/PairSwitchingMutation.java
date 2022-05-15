@@ -14,9 +14,10 @@ public class PairSwitchingMutation implements Mutation {
 
     private final int numberOfSwitchedPairs;
 
+    private final Random r = new Random();
+
     @Override
     public List<Allele> mutate(List<Allele> alleles) {
-        Random r = new Random();
         if (r.nextDouble() > mutationChance) {
             return alleles;
         }
