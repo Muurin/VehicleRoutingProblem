@@ -11,14 +11,15 @@ import java.util.*;
 public class TournamentSelection implements Selection {
 
     private final int tournamentSize;
-    private final int desiredNumberOfParentPairs;
+
+    private final double desiredPercentageOfParentPairs;
 
     @Override
     public List<Pair<GAChromosome>> select(Population population) {
 
         List<GAChromosome> temp = new LinkedList<>(population.getIndividuals());
         List<Pair<GAChromosome>> result = new LinkedList<>();
-        for (int i = 0; i < desiredNumberOfParentPairs; i++) {
+        for (int i = 0; i < Math.round(population.getSize() * desiredPercentageOfParentPairs / 4) * 2; i++) {
             result.add(Pair.<GAChromosome>builder().left(tournament(temp)).right(tournament(temp)).build());
         }
         return result;

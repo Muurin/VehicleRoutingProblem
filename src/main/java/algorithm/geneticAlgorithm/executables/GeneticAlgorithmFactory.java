@@ -9,6 +9,8 @@ import algorithm.geneticAlgorithm.operators.selection.Selection;
 import algorithm.geneticAlgorithm.actions.CallbackAction;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class GeneticAlgorithmFactory {
 
@@ -26,7 +28,9 @@ public class GeneticAlgorithmFactory {
 
     private final CallbackAction callbackAction;
 
-    public void start(int nthread, int popSize) throws InterruptedException {
+    private final int popSize;
+
+    public void start(int nthread) throws InterruptedException {
 
         for (int i = 0; i < nthread; i++) {
             Thread thread = new Thread(new GeneticAlgorithm(
@@ -36,11 +40,28 @@ public class GeneticAlgorithmFactory {
                     selection,
                     elimination,
                     convergenceChecker.deepCopy(),
-                    callbackAction, popSize));
+                    callbackAction,
+                    popSize));
             thread.start();
         }
-
     }
+
+    public void start(List<String> threadSpecificCallbackConfigs) throws InterruptedException {
+
+        for (String threadSpecificCallbackConfig: threadSpecificCallbackConfigs) {
+            Thread thread = new Thread(new GeneticAlgorithm(
+                    populationFactory,
+                    crossover,
+                    mutation,
+                    selection,
+                    elimination,
+                    convergenceChecker.deepCopy(),
+                    callbackAction.cloneWithDifferentConfiguration(threadSpecificCallbackConfig),
+                    popSize));
+            thread.start();
+        }
+    }
+
 }
 
 

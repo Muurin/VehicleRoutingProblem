@@ -7,22 +7,14 @@ import util.FileWriterUtil;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class LoggingCallback implements CallbackAction{
+public class PreAnalisysLoggingCallback implements CallbackAction{
 
     private final String resultPath;
 
-    private final String progressPath;
-
     private final String filename;
-
-    private final int logEveryNthIteration;
-
-    private int count=0;
-
 
     @Override
     public void resultAction(Population population) {
-//        FileWriterUtil.writeToNewOrExistingFile(resultPath,filename, Objects.requireNonNull(population.getIndividuals().peek()).getAlleles().toString());
         FileWriterUtil.writeToNewOrExistingFile(resultPath,filename, String.valueOf(Objects.requireNonNull(population.getIndividuals().peek()).getCostValue()));
     }
 
@@ -43,9 +35,17 @@ public class LoggingCallback implements CallbackAction{
 
     @Override
     public void iterationAction(Population population) {
-//        if(count%logEveryNthIteration==0) {
-//            FileWriterUtil.writeToNewOrExistingFile(progressPath, filename, String.valueOf(Objects.requireNonNull(population.getIndividuals().peek()).getCostValue()));
-//            count=0;
-//        }
     }
+
+    /**
+     * Configuration are new parameters for PreAnalisysCallbackFunction divided by comma
+     * @param configuration
+     * @return
+     */
+    @Override
+    public CallbackAction cloneWithDifferentConfiguration(String configuration) {
+        String[] params = configuration.split(",");
+        return new PreAnalisysLoggingCallback(params[0],params[1]);
+    }
+
 }

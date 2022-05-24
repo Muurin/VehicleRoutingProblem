@@ -14,4 +14,6 @@ public interface CallbackAction {
 
     void iterationAction(Population population);
 
+    CallbackAction cloneWithDifferentConfiguration(String configuration);
+
 }

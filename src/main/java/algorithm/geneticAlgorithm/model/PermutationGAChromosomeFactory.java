@@ -17,29 +17,30 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
 
     private final SolutionEvaluator solutionEvaluator;
 
-    private final SolutionContextFactory solutionContextFactory;
+    private final ThreadLocal<SolutionContext> solutionContextThreadLocal;
 
 
     public PermutationGAChromosomeFactory(SolutionContextFactory solutionContextFactory, SolutionEvaluator solutionEvaluator) {
         this.solutionEvaluator = solutionEvaluator;
-        this.solutionContextFactory = solutionContextFactory;
-
+        this.solutionContextThreadLocal = ThreadLocal.withInitial(solutionContextFactory::createSolutionContext);
     }
 
     @Override
     public GAChromosome createGAChromosome(List<Allele> alleles) {
 
-        return GAChromosome
+        GAChromosome result = GAChromosome
                 .builder()
                 .alleles(alleles)
                 .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(alleles)))
                 .build();
+        solutionContextThreadLocal.get().reset();
+        return result;
     }
 
     @Override
     public GAChromosome createRandomFeasibleGAChromosome() {
 
-        List<Allele> permutedLocations = solutionContextFactory.createSolutionContext()
+        List<Allele> permutedLocations = solutionContextThreadLocal.get()
                 .getCustomers()
                 .values()
                 .stream()
@@ -47,6 +48,7 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
                 .collect(Collectors.toList());
 
         Collections.shuffle(permutedLocations);
+        solutionContextThreadLocal.get().reset();
         return createGAChromosome(permutedLocations);
     }
 
@@ -57,7 +59,7 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
 
     private SolutionContext extendSolutionWithChargingStations(List<Allele> alleles) {
 
-        SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
+        SolutionContext solutionContext = solutionContextThreadLocal.get();
         Long vehicleId = 0L;
         Vehicle currentVehicle = solutionContext.addVehicleSpecificId(vehicleId);
 
@@ -71,15 +73,16 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
             }
             //current vehicle hasnt travelled yet
 
-            if (currentVehicle.getVehiclePath().isEmpty()) {
-                currentVehicle.travelTo(destination);
-            } else {
-                passIntermediateChargingStations(currentVehicle, destination);
-                currentVehicle.travelTo(destination);
-            }
+//            if (currentVehicle.getVehiclePath().isEmpty()) {
+//                currentVehicle.travelTo(destination);
+//            } else {
+//                passIntermediateChargingStations(currentVehicle, destination);
+//                currentVehicle.travelTo(destination);
+//            }
+            passIntermediateChargingStations(currentVehicle, destination);
+            currentVehicle.travelTo(destination);
         }
         goToDepot(solutionContext, currentVehicle);
-
         return solutionContext;
     }
 
@@ -93,9 +96,17 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
 
     private void passIntermediateChargingStations(Vehicle currentVehicle, Location destination) {
         while (!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle, destination)) {
-            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
-//            System.out.println("MEDUPUNJENJE! - "+ currentVehicle.getCurrentLocation().getId() + " " + chargingStation.getId()+ " "+ destination.getId());
-            currentVehicle.travelTo(chargingStation);
+            try {
+                Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+                currentVehicle.travelTo(chargingStation);
+
+            }catch (NullPointerException e){
+                System.out.println("Current fuel - "+currentVehicle.getCurrentFuel() +"\n"
+                +"Current location - " + currentVehicle.getCurrentLocation()  +"\n"
+                        +"Target location - " + destination);
+                throw new RuntimeException();
+            }
+            //            System.out.println("MEDUPUNJENJE! - "+ currentVehicle.getCurrentLocation().getId() + " " + chargingStation.getId()+ " "+ destination.getId());
         }
     }
 
