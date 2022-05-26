@@ -30,6 +30,11 @@ public class OX implements Crossover {
                         Math.min(crossoverIndex1,crossoverIndex2), Math.max(crossoverIndex1,crossoverIndex2)));
     }
 
+    @Override
+    public String getName() {
+        return "OX";
+    }
+
     private List<Allele> getOneOffspring(List<Allele> chromosome1, List<Allele> chromosome2,
                                                int index1, int index2) {
 

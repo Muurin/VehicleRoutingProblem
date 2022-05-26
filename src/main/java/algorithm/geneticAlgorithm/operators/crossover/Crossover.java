@@ -8,4 +8,6 @@ import java.util.List;
 public interface Crossover {
 
     Collection<List<Allele>> crossover(List<Allele> gaChromosome1, List<Allele> gaChromosome2);
+
+    String getName();
 }

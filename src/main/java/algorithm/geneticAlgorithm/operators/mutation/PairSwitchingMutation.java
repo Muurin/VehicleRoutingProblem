@@ -45,4 +45,9 @@ public class PairSwitchingMutation implements Mutation {
 
         return result;
     }
+
+    @Override
+    public String getName() {
+        return "PairSwitchingMutation";
+    }
 }

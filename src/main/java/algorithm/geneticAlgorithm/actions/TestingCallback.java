@@ -27,7 +27,7 @@ public class TestingCallback implements CallbackAction {
 
     @Override
     public void iterationAction(Population population) {
-//        System.out.println("Nakon iteracije " + population.getIndividuals().peek());
+        System.out.println("Nakon iteracije " + population.getIndividuals().peek());
     }
 
     @Override

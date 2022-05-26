@@ -4,6 +4,6 @@ import solution.SolutionContext;
 
 public interface SolutionEvaluator {
 
-	public double evaluate(SolutionContext solution);
+	double evaluate(SolutionContext solution);
 
 }

@@ -17,4 +17,9 @@ public class AggregateEqualChanceMutation implements Mutation {
         return mutations.get(0).mutate(alleles);
 
     }
+
+    @Override
+    public String getName() {
+        return "Aggregate mutation";
+    }
 }

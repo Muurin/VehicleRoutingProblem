@@ -45,4 +45,9 @@ public class MOC implements Crossover {
 
         return List.of(Arrays.asList(offspring1), Arrays.asList(offspring2));
     }
+
+    @Override
+    public String getName() {
+        return "MOC";
+    }
 }

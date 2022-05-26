@@ -15,7 +15,6 @@ import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 import algorithm.geneticAlgorithm.operators.crossover.TSP.OX;
 import algorithm.geneticAlgorithm.operators.elimination.Elimination;
 import algorithm.geneticAlgorithm.operators.elimination.EliminationWithElitism;
-import algorithm.geneticAlgorithm.operators.elimination.RandomEliminationWithElitism;
 import algorithm.geneticAlgorithm.operators.mutation.CyclicMutation;
 import algorithm.geneticAlgorithm.operators.mutation.Mutation;
 import algorithm.geneticAlgorithm.operators.selection.Selection;
@@ -74,6 +73,6 @@ public class ProbaGA {
                 selection,
                 elimination,convergenceChecker,callbackAction,200);
 
-        geneticAlgorithmFactory.start(5);
+        geneticAlgorithmFactory.start(1);
     }
 }

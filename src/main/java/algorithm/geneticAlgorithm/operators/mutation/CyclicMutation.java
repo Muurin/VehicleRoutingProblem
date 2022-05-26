@@ -28,4 +28,9 @@ public class CyclicMutation implements Mutation {
         mutated.addAll(alleles.subList(0, alleles.size() - (shift % alleles.size())));
         return mutated;
     }
+
+    @Override
+    public String getName() {
+        return "CyclicMutation";
+    }
 }

@@ -43,4 +43,9 @@ public class SequencePertrubationMutation implements Mutation {
 
         return result;
     }
+
+    @Override
+    public String getName() {
+        return "SequencePertrubationMutation";
+    }
 }

@@ -18,4 +18,10 @@ public class AggregatedEqualChanceCrossover implements Crossover {
         Collections.shuffle(crossovers);
         return crossovers.get(0).crossover(gaChromosome1,gaChromosome2);
     }
+
+    @Override
+    public String getName() {
+        return "Aggregated crossover" ;
+        //+ crossovers.stream().map(Crossover::getName).collect(Collectors.joining(","));
+    }
 }

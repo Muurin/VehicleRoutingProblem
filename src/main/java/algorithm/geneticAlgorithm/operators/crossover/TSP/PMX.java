@@ -73,5 +73,10 @@ public class PMX implements Crossover {
         return List.of(Arrays.asList(offspring1), Arrays.asList(offspring2));
     }
 
+    @Override
+    public String getName() {
+        return "PMX";
+    }
+
 
 }

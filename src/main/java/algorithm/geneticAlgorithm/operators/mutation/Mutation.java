@@ -12,4 +12,6 @@ public interface Mutation {
      * @return
      */
     List<Allele> mutate(List<Allele> alleles);
+
+    String getName();
 }
