@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GAChromosomeFactory {
 
-    GAChromosome createGAChromosome(List<Allele> alleles);
+    GAChromosome createGAChromosome(List<Gene> genes);
 
     GAChromosome createRandomFeasibleGAChromosome();
 

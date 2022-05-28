@@ -1,6 +1,6 @@
 package algorithm.geneticAlgorithm.operators.crossover.TSP;
 
-import algorithm.geneticAlgorithm.model.Allele;
+import algorithm.geneticAlgorithm.model.Gene;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 import lombok.RequiredArgsConstructor;
 
@@ -14,9 +14,9 @@ public class AggregatedEqualChanceCrossover implements Crossover {
     private final List<Crossover> crossovers;
 
     @Override
-    public Collection<List<Allele>> crossover(List<Allele> gaChromosome1, List<Allele> gaChromosome2) {
+    public Collection<List<Gene>> crossover(List<Gene> parent1, List<Gene> parent2) {
         Collections.shuffle(crossovers);
-        return crossovers.get(0).crossover(gaChromosome1,gaChromosome2);
+        return crossovers.get(0).crossover(parent1, parent2);
     }
 
     @Override

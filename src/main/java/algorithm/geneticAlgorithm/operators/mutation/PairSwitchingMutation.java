@@ -1,6 +1,6 @@
 package algorithm.geneticAlgorithm.operators.mutation;
 
-import algorithm.geneticAlgorithm.model.Allele;
+import algorithm.geneticAlgorithm.model.Gene;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -17,13 +17,13 @@ public class PairSwitchingMutation implements Mutation {
     private final Random r = new Random();
 
     @Override
-    public List<Allele> mutate(List<Allele> alleles) {
+    public List<Gene> mutate(List<Gene> genes) {
         if (r.nextDouble() > mutationChance) {
-            return alleles;
+            return genes;
         }
 
-        List<Allele> result = new ArrayList<>(alleles);
-        Allele temp;
+        List<Gene> result = new ArrayList<>(genes);
+        Gene temp;
 
         for (int i = 0; i < numberOfSwitchedPairs; i++) {
 
@@ -31,9 +31,9 @@ public class PairSwitchingMutation implements Mutation {
             int mutationIndex2;
 
             do {
-                mutationIndex1 = r.nextInt(alleles.size());
+                mutationIndex1 = r.nextInt(genes.size());
 
-                mutationIndex2 = r.nextInt(alleles.size());
+                mutationIndex2 = r.nextInt(genes.size());
             }
             while (mutationIndex1 == mutationIndex2);
 

@@ -1,43 +1,42 @@
 package algorithm.geneticAlgorithm.operators.crossover.TSP;
 
-import algorithm.geneticAlgorithm.model.Allele;
+import algorithm.geneticAlgorithm.model.Gene;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 
-import javax.sound.midi.SysexMessage;
 import java.util.*;
 
 public class MOC implements Crossover {
 
 
     @Override
-    public Collection<List<Allele>> crossover(List<Allele> chromosome1, List<Allele> chromosome2) {
+    public Collection<List<Gene>> crossover(List<Gene> parent1, List<Gene> parent2) {
 
         Random r = new Random();
 
-        int index = r.nextInt(chromosome1.size());
+        int index = r.nextInt(parent1.size());
 
-        Set<Allele> parent1LeftAllelesSet = new HashSet<>(chromosome1.subList(0, index));
-        Set<Allele> parent2LeftAllelesSet = new HashSet<>(chromosome2.subList(0, index));
+        Set<Gene> parent1LeftAllelesSet = new HashSet<>(parent1.subList(0, index));
+        Set<Gene> parent2LeftAllelesSet = new HashSet<>(parent2.subList(0, index));
 
-        List<Allele> parent1RightAllelesList = new ArrayList<>(chromosome1.subList(index, chromosome1.size()));
-        List<Allele> parent2RightAllelesList = new ArrayList<>(chromosome2.subList(index, chromosome2.size()));
+        List<Gene> parent1RightAllelesList = new ArrayList<>(parent1.subList(index, parent1.size()));
+        List<Gene> parent2RightAllelesList = new ArrayList<>(parent2.subList(index, parent2.size()));
 
 
-        Allele[] offspring1 = new Allele[chromosome1.size()];
-        Allele[] offspring2 = new Allele[chromosome1.size()];
+        Gene[] offspring1 = new Gene[parent1.size()];
+        Gene[] offspring2 = new Gene[parent1.size()];
 
         int count1 = 0, count2 = 0;
 
         for (int i = 0; i < offspring1.length; i++) {
 
-            if (parent2LeftAllelesSet.contains(chromosome1.get(i))) {
-                offspring1[i] = chromosome1.get(i);
+            if (parent2LeftAllelesSet.contains(parent1.get(i))) {
+                offspring1[i] = parent1.get(i);
             }else{
                 offspring1[i] = parent2RightAllelesList.get(count1++);
             }
 
-            if (parent1LeftAllelesSet.contains(chromosome2.get(i))) {
-                offspring2[i] = chromosome2.get(i);
+            if (parent1LeftAllelesSet.contains(parent2.get(i))) {
+                offspring2[i] = parent2.get(i);
             }else{
                 offspring2[i] = parent1RightAllelesList.get(count2++);
             }

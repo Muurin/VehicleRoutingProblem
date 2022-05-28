@@ -26,12 +26,12 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
     }
 
     @Override
-    public GAChromosome createGAChromosome(List<Allele> alleles) {
+    public GAChromosome createGAChromosome(List<Gene> genes) {
 
         GAChromosome result = GAChromosome
                 .builder()
-                .alleles(alleles)
-                .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(alleles)))
+                .genes(genes)
+                .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(genes)))
                 .build();
         solutionContextThreadLocal.get().reset();
         return result;
@@ -40,11 +40,11 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
     @Override
     public GAChromosome createRandomFeasibleGAChromosome() {
 
-        List<Allele> permutedLocations = solutionContextThreadLocal.get()
+        List<Gene> permutedLocations = solutionContextThreadLocal.get()
                 .getCustomers()
                 .values()
                 .stream()
-                .map(location -> Allele.builder().location(location).build())
+                .map(location -> Gene.builder().location(location).build())
                 .collect(Collectors.toList());
 
         Collections.shuffle(permutedLocations);
@@ -54,31 +54,24 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
 
     @Override
     public double evaluateChromosome(GAChromosome gaChromosome) {
-        return solutionEvaluator.evaluate(extendSolutionWithChargingStations(gaChromosome.getAlleles()));
+        return solutionEvaluator.evaluate(extendSolutionWithChargingStations(gaChromosome.getGenes()));
     }
 
-    private SolutionContext extendSolutionWithChargingStations(List<Allele> alleles) {
+    private SolutionContext extendSolutionWithChargingStations(List<Gene> genes) {
 
         SolutionContext solutionContext = solutionContextThreadLocal.get();
         Long vehicleId = 0L;
         Vehicle currentVehicle = solutionContext.addVehicleSpecificId(vehicleId);
 
         //for each location
-        for (Allele allele : alleles) {
-            Location destination = allele.getLocation();
+        for (Gene gene : genes) {
+            Location destination = gene.getLocation();
 
             if (!VehicleUtil.canServiceCustomer(currentVehicle, destination)) {
                 goToDepot(solutionContext, currentVehicle);
                 currentVehicle = solutionContext.addVehicleSpecificId(++vehicleId);
             }
-            //current vehicle hasnt travelled yet
 
-//            if (currentVehicle.getVehiclePath().isEmpty()) {
-//                currentVehicle.travelTo(destination);
-//            } else {
-//                passIntermediateChargingStations(currentVehicle, destination);
-//                currentVehicle.travelTo(destination);
-//            }
             passIntermediateChargingStations(currentVehicle, destination);
             currentVehicle.travelTo(destination);
         }
@@ -89,24 +82,22 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
     private void goToDepot(SolutionContext solutionContext, Vehicle currentVehicle) {
         Location depot = solutionContext.getDepots()
                 .get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.DEPARTURE_LOCATION)));
-        passIntermediateChargingStations(currentVehicle, depot);
+        passIntermediateChargingStationsRelaxedCondition(currentVehicle, depot);
         currentVehicle.travelTo(depot);
+    }
+
+    private void passIntermediateChargingStationsRelaxedCondition(Vehicle currentVehicle, Location destination) {
+        while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
+            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+            currentVehicle.travelTo(chargingStation);
+        }
     }
 
 
     private void passIntermediateChargingStations(Vehicle currentVehicle, Location destination) {
         while (!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle, destination)) {
-            try {
-                Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
-                currentVehicle.travelTo(chargingStation);
-
-            }catch (NullPointerException e){
-                System.out.println("Current fuel - "+currentVehicle.getCurrentFuel() +"\n"
-                +"Current location - " + currentVehicle.getCurrentLocation()  +"\n"
-                        +"Target location - " + destination);
-                throw new RuntimeException();
-            }
-            //            System.out.println("MEDUPUNJENJE! - "+ currentVehicle.getCurrentLocation().getId() + " " + chargingStation.getId()+ " "+ destination.getId());
+            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+            currentVehicle.travelTo(chargingStation);
         }
     }
 

@@ -27,12 +27,12 @@ public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
     private final SolutionEvaluator solutionEvaluator;
 
     @Override
-    public GAChromosome createGAChromosome(List<Allele> alleles) {
+    public GAChromosome createGAChromosome(List<Gene> genes) {
 
         return GAChromosome
                 .builder()
-                .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory, alleles)))
-                .alleles(alleles)
+                .costValue(solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory, genes)))
+                .genes(genes)
                 .build();
     }
 
@@ -73,33 +73,33 @@ public class RandomKeysGAChromosomeFactory implements GAChromosomeFactory {
             count++;
         }
 
-        List<Allele> alleles = IntStream.range(0, locations.length)
-                .mapToObj(e -> Allele.builder().location(locations[e]).weight(randomWeights[e]).build()).collect(Collectors.toList());
+        List<Gene> genes = IntStream.range(0, locations.length)
+                .mapToObj(e -> Gene.builder().location(locations[e]).weight(randomWeights[e]).build()).collect(Collectors.toList());
 
-        return createGAChromosome(alleles);
+        return createGAChromosome(genes);
     }
 
     @Override
     public double evaluateChromosome(GAChromosome gaChromosome) {
-        return solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory,gaChromosome.getAlleles()));
+        return solutionEvaluator.evaluate(extendSolutionWithChargingStations(solutionContextFactory,gaChromosome.getGenes()));
     }
 
-    private SolutionContext extendSolutionWithChargingStations(SolutionContextFactory solutionContextFactory, List<Allele> alleles) {
+    private SolutionContext extendSolutionWithChargingStations(SolutionContextFactory solutionContextFactory, List<Gene> genes) {
 
         SolutionContext solutionContext = solutionContextFactory.createSolutionContext();
         //for each location
-        for (Allele allele : alleles) {
+        for (Gene gene : genes) {
 
-            Long vehicleId = Math.round(allele.getWeight());
+            Long vehicleId = Math.round(gene.getWeight());
             //determine vehicle
             Vehicle currentVehicle = !solutionContext.getVehicles().containsKey(vehicleId) ?
                     solutionContext.addVehicleSpecificId(vehicleId) : solutionContext.getVehicles().get(vehicleId);
             //current vehicle hasnt travelled yet
 
             if (currentVehicle.getVehiclePath().isEmpty()) {
-                currentVehicle.travelTo(allele.getLocation());
+                currentVehicle.travelTo(gene.getLocation());
             } else {
-                Location destination = allele.getLocation();
+                Location destination = gene.getLocation();
                 while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
                     Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
                     currentVehicle.travelTo(chargingStation);

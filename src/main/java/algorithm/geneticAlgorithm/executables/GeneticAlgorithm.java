@@ -54,12 +54,12 @@ public class GeneticAlgorithm implements Runnable {
             //crossover
             Collection<GAChromosome> offspring = new LinkedList<>();
             for (Pair<GAChromosome> parents : selected) {
-                offspring.addAll(crossover.crossover(parents.getLeft().getAlleles(), parents.getRight().getAlleles())
+                offspring.addAll(crossover.crossover(parents.getLeft().getGenes(), parents.getRight().getGenes())
                         .stream().map(populationFactory::allelsToChromosome).collect(Collectors.toList()));
                 callbackAction.crossoverAction(population);
                 offspring = offspring
                         .stream()
-                        .map(gaChromosome -> mutation.mutate(gaChromosome.getAlleles()))
+                        .map(gaChromosome -> mutation.mutate(gaChromosome.getGenes()))
                         .map(populationFactory::allelsToChromosome).collect(Collectors.toList());
             }
 

@@ -65,8 +65,8 @@ public class PopulationFactory {
 
     }
 
-    public GAChromosome allelsToChromosome(List<Allele> alleles){
-        return gaChromosomeFactory.createGAChromosome(alleles);
+    public GAChromosome allelsToChromosome(List<Gene> genes){
+        return gaChromosomeFactory.createGAChromosome(genes);
     }
 
 

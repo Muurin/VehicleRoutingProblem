@@ -12,7 +12,7 @@ public class GAChromosome implements Comparable<GAChromosome> {
 
     private double costValue;
     @Builder.Default
-    private List<Allele> alleles = new LinkedList<>();
+    private List<Gene> genes = new LinkedList<>();
 
 
     @Override
@@ -25,14 +25,14 @@ public class GAChromosome implements Comparable<GAChromosome> {
         if (this == o) return true;
         if (!(o instanceof GAChromosome)) return false;
         GAChromosome chromosome = (GAChromosome) o;
-        return chromosome.getAlleles().equals(alleles);
+        return chromosome.getGenes().equals(genes);
     }
 
     @Override
     public String toString() {
         return "GAChromosome{" +
                 "costValue=" + costValue +
-                ", alleles=" + alleles +
+                ", alleles=" + genes +
                 '}';
     }
 }

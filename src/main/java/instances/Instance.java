@@ -14,5 +14,4 @@ public interface Instance {
 
 	Set<VehicleProperty> getVehicleProperties();
 
-
 }
