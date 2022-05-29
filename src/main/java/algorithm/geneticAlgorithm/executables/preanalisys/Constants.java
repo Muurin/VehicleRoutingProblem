@@ -14,7 +14,7 @@ public class Constants {
 
     public static final double finalMutationChance = 0;
 
-    public static final double[] mutationChances = {0.3, 0.5, 0.7, 1};
+    public static final double[] mutationChances = {0.3, 0.2, 0.1, 0.05};
 
     public static final int[] populationSizes = {50, 100, 200, 500};
 

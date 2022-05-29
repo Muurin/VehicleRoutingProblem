@@ -36,7 +36,7 @@ public class PopulationSizeTuning {
                 GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
                         new PopulationFactory(new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator())),
                         new OX(),
-                        new CyclicMutation(3, 0.3),
+                        new CyclicMutation(3, 0.1),
                         new TournamentSelection(3, 0.6),
                         new EliminationWithElitism(0.2),
                         new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),

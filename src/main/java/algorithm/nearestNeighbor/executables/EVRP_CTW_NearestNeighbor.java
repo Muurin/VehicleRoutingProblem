@@ -1,4 +1,4 @@
-package solution.executables;
+package algorithm.nearestNeighbor.executables;
 
 import instanceLoaders.EVRP_CTWInstanceLoader;
 import instanceLoaders.InstanceLoader;

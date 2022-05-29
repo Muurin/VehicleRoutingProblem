@@ -8,12 +8,12 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LoggingAggregateConvergenceChecker extends AggregateConvergenceChecker{
+public class FitnessLoggingConvergenceChecker extends AggregateConvergenceChecker{
 
     private final String loggingirectoryPath;
 
 
-    public LoggingAggregateConvergenceChecker(ConvergenceChecker primaryConvergenceChecker, List<ConvergenceChecker> secondaryCheckers, String loggingDirectoryPath) {
+    public FitnessLoggingConvergenceChecker(ConvergenceChecker primaryConvergenceChecker, List<ConvergenceChecker> secondaryCheckers, String loggingDirectoryPath) {
         super(primaryConvergenceChecker, secondaryCheckers);
         this.loggingirectoryPath =loggingDirectoryPath;
     }

@@ -25,7 +25,7 @@ public class CrossoverTuning {
 
     private static final Integer POP_SIZE = 50;
 
-    private static final Double MUTATION_CHANCE = 0.3;
+    private static final Double MUTATION_CHANCE = 0.2;
 
     public static void main(String[] args) throws InterruptedException, IOException {
 

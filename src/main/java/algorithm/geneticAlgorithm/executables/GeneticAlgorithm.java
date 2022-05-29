@@ -61,6 +61,7 @@ public class GeneticAlgorithm implements Runnable {
                         .stream()
                         .map(gaChromosome -> mutation.mutate(gaChromosome.getGenes()))
                         .map(populationFactory::allelsToChromosome).collect(Collectors.toList());
+                callbackAction.mutationAction(population);
             }
 
             population = populationFactory.supplementPopulationWithIndividuals(population, offspring);
