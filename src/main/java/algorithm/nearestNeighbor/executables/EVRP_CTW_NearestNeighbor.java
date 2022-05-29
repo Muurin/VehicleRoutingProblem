@@ -19,7 +19,7 @@ public class EVRP_CTW_NearestNeighbor {
 		InstanceLoader instanceLoader = new EVRP_CTWInstanceLoader();
 		Instance instance = instanceLoader.load(VRPInstancePaths.getEVRP_CTWPath2());
 
-		SolutionContext solutionContext = new NearestNeighbor(false).start(instance);
+		SolutionContext solutionContext = new NearestNeighbor().start(instance);
 		SolutionEvaluator solutionEvaluator = new SimpleDistanceEvaluator();
 		double score = solutionEvaluator.evaluate(solutionContext);
 		System.out.println(score);

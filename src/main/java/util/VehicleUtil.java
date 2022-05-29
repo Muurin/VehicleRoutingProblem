@@ -71,7 +71,28 @@ public class VehicleUtil {
         List<Location> locationSortedByDistance = SolutionUtil.locationsSortedByDistance(solutionContext.getCustomers().values(), vehicle.getCurrentLocation());
         return locationSortedByDistance.stream().filter(location -> canServiceCustomer(vehicle, location)).findFirst().orElse(null);
 
+    }
 
+    public static void goToDepot(Vehicle currentVehicle) {
+        Location depot =currentVehicle.getSolutionContext().getDepots()
+                .get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.DEPARTURE_LOCATION)));
+        passIntermediateChargingStationsRelaxedCondition(currentVehicle, depot);
+        currentVehicle.travelTo(depot);
+    }
+
+    public static void passIntermediateChargingStationsRelaxedCondition(Vehicle currentVehicle, Location destination) {
+        while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
+            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+            currentVehicle.travelTo(chargingStation);
+        }
+    }
+
+
+    public static void passIntermediateChargingStations(Vehicle currentVehicle, Location destination) {
+        while (!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle, destination)) {
+            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
+            currentVehicle.travelTo(chargingStation);
+        }
     }
 
 }

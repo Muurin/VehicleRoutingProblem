@@ -1,12 +1,10 @@
 package algorithm.geneticAlgorithm.model;
 
+import model.Location;
+import model.Vehicle;
 import solution.SolutionContext;
 import solution.SolutionContextFactory;
 import solution.evaluators.SolutionEvaluator;
-import instances.Properties.VehiclePropertyType;
-import model.Location;
-import model.Vehicle;
-import util.PropertiesUtil;
 import util.VehicleUtil;
 
 import java.util.Collections;
@@ -68,37 +66,16 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
             Location destination = gene.getLocation();
 
             if (!VehicleUtil.canServiceCustomer(currentVehicle, destination)) {
-                goToDepot(solutionContext, currentVehicle);
+                VehicleUtil.goToDepot(currentVehicle);
                 currentVehicle = solutionContext.addVehicleSpecificId(++vehicleId);
             }
 
-            passIntermediateChargingStations(currentVehicle, destination);
+            VehicleUtil.passIntermediateChargingStations(currentVehicle, destination);
             currentVehicle.travelTo(destination);
         }
-        goToDepot(solutionContext, currentVehicle);
+        VehicleUtil.goToDepot(currentVehicle);
         return solutionContext;
     }
 
-    private void goToDepot(SolutionContext solutionContext, Vehicle currentVehicle) {
-        Location depot = solutionContext.getDepots()
-                .get(PropertiesUtil.getStringPropertyValue(currentVehicle.getVehiclePropertyMap().get(VehiclePropertyType.DEPARTURE_LOCATION)));
-        passIntermediateChargingStationsRelaxedCondition(currentVehicle, depot);
-        currentVehicle.travelTo(depot);
-    }
-
-    private void passIntermediateChargingStationsRelaxedCondition(Vehicle currentVehicle, Location destination) {
-        while (!VehicleUtil.canReachLocation(currentVehicle, destination)) {
-            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
-            currentVehicle.travelTo(chargingStation);
-        }
-    }
-
-
-    private void passIntermediateChargingStations(Vehicle currentVehicle, Location destination) {
-        while (!VehicleUtil.canReachLocationAndNearestChargingStation(currentVehicle, destination)) {
-            Location chargingStation = VehicleUtil.chooseIntermediateChargingStation(currentVehicle, destination);
-            currentVehicle.travelTo(chargingStation);
-        }
-    }
 
 }
