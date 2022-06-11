@@ -11,6 +11,7 @@ public class SimpleDistanceEvaluator implements SolutionEvaluator{
 		for(Vehicle vehicle:solution.getVehicles().values()){
 			score+=vehicle.getCurrentDistance();
 		}
+		solution.reset();
 		return score;
 	}
 }

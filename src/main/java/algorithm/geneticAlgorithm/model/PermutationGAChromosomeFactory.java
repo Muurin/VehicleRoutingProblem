@@ -55,7 +55,7 @@ public class PermutationGAChromosomeFactory implements GAChromosomeFactory {
         return solutionEvaluator.evaluate(extendSolutionWithChargingStations(gaChromosome.getGenes()));
     }
 
-    private SolutionContext extendSolutionWithChargingStations(List<Gene> genes) {
+    public SolutionContext extendSolutionWithChargingStations(List<Gene> genes) {
 
         SolutionContext solutionContext = solutionContextThreadLocal.get();
         Long vehicleId = 0L;

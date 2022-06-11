@@ -1,12 +1,10 @@
 package temp;
 
 import algorithm.geneticAlgorithm.actions.CallbackAction;
-import algorithm.geneticAlgorithm.actions.PreAnalisysLoggingCallback;
 import algorithm.geneticAlgorithm.actions.TestingCallback;
 import algorithm.geneticAlgorithm.convergenceChecker.ConvergenceChecker;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeConvergenceChecker;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeIntervalType;
-import algorithm.geneticAlgorithm.executables.GeneticAlgorithm;
 import algorithm.geneticAlgorithm.executables.GeneticAlgorithmFactory;
 import algorithm.geneticAlgorithm.model.GAChromosomeFactory;
 import algorithm.geneticAlgorithm.model.PermutationGAChromosomeFactory;

@@ -1,13 +1,12 @@
 package algorithm.geneticAlgorithm.executables.preanalisys;
 
-import algorithm.geneticAlgorithm.actions.PreAnalisysLoggingCallback;
+import algorithm.geneticAlgorithm.actions.ResultLoggingCallback;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeConvergenceChecker;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeIntervalType;
 import algorithm.geneticAlgorithm.executables.GeneticAlgorithmFactory;
 import algorithm.geneticAlgorithm.model.PermutationGAChromosomeFactory;
 import algorithm.geneticAlgorithm.model.PopulationFactory;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
-import algorithm.geneticAlgorithm.operators.crossover.TSP.OX;
 import algorithm.geneticAlgorithm.operators.elimination.EliminationWithElitism;
 import algorithm.geneticAlgorithm.operators.mutation.CyclicMutation;
 import algorithm.geneticAlgorithm.operators.selection.TournamentSelection;
@@ -15,6 +14,7 @@ import instanceLoaders.EVRP_CTWInstanceLoader;
 import instances.Instance;
 import solution.SolutionContextFactory;
 import solution.evaluators.SimpleDistanceEvaluator;
+import solution.evaluators.SimpleTimeEvaluator;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,17 +36,17 @@ public class CrossoverTuning {
             Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
             for (Crossover crossover : Constants.crossovers) {
 
-                List<String> resultFilenames = IntStream.range(0, 10).mapToObj(operand -> Constants.crossoverTuningPath + "Crossover_" + crossover.getName() + "," + operand).collect(Collectors.toList());
+                List<String> resultFilenames = IntStream.range(0, 10).mapToObj(operand -> Constants.crossoverTuningPath + "Crossover_" + crossover.getName() + "," + operand+"_probaVrijeme").collect(Collectors.toList());
 
 
                 GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
-                        new PopulationFactory(new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator())),
+                        new PopulationFactory(new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleTimeEvaluator())),//new SimpleDistanceEvaluator())),
                         crossover,
                         new CyclicMutation(5, MUTATION_CHANCE),
                         new TournamentSelection(3, 0.6),
                         new EliminationWithElitism(0.2),
                         new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),
-                        new PreAnalisysLoggingCallback("", ""),
+                        new ResultLoggingCallback("", ""),
                         POP_SIZE);
 
                 geneticAlgorithmFactory.start(resultFilenames);

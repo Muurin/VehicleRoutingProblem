@@ -28,7 +28,7 @@ public class Proba3 {
 //        FileReaderUtil.processPreanalisysData(Constants.mutationTuningPath+"/Mutation_SequencePertrubationMutation", new String[]{"0","1","2","3","4","5","6","7","8","9"});
 //        FileReaderUtil.processPreanalisysData(Constants.mutationTuningPath+"/Mutation_CyclicMutation", new String[]{"0","1","2","3","4","5","6","7","8","9"});
 //        FileReaderUtil.processPreanalisysData(Constants.mutationTuningPath+"/Mutation_PairSwitchingMutation", new String[]{"0","1","2","3","4","5","6","7","8","9"});
-        FileReaderUtil.processPreanalisysData(Constants.mutationTuningPath+"/Mutation_Aggregate mutation", new String[]{"0","1","2","3","4","5","6","7","8","9"});
+//        FileReaderUtil.processPreanalisysData(Constants.mutationTuningPath+"/Mutation_Aggregate mutation", new String[]{"0","1","2","3","4","5","6","7","8","9"});
 
 
     }

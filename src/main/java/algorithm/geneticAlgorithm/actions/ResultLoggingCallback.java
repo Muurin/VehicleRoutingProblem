@@ -7,9 +7,9 @@ import util.FileWriterUtil;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class PreAnalisysLoggingCallback implements CallbackAction{
+public class ResultLoggingCallback implements CallbackAction{
 
-    private final String resultPath;
+    protected final String resultPath;
 
     private final String filename;
 
@@ -45,7 +45,7 @@ public class PreAnalisysLoggingCallback implements CallbackAction{
     @Override
     public CallbackAction cloneWithDifferentConfiguration(String configuration) {
         String[] params = configuration.split(",");
-        return new PreAnalisysLoggingCallback(params[0],params[1]);
+        return new ResultLoggingCallback(params[0],params[1]);
     }
 
 }

@@ -1,5 +1,7 @@
 package algorithm.geneticAlgorithm.model;
 
+import solution.SolutionContext;
+
 import java.util.List;
 
 public interface GAChromosomeFactory {
@@ -9,5 +11,7 @@ public interface GAChromosomeFactory {
     GAChromosome createRandomFeasibleGAChromosome();
 
     double evaluateChromosome(GAChromosome gaChromosome);
+
+    SolutionContext extendSolutionWithChargingStations(List<Gene> genes);
 
 }

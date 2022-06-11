@@ -40,8 +40,7 @@ public class Vehicle {
 	private void addRoute(Route route) {
 		vehiclePath.add(route);
 
-		double timeSpent = PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.AVERAGE_VELOCITY))
-				/ route.getDistanceTravelled();
+		double timeSpent = route.getDistanceTravelled()/PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.AVERAGE_VELOCITY));
 
 		double fuelSpent = PropertiesUtil.getDoublePropertyValue(vehiclePropertyMap.get(VehiclePropertyType.FUEL_CONSUMPTION_RATE)) * route.getDistanceTravelled();
 		currentFuel -= fuelSpent;
@@ -67,6 +66,7 @@ public class Vehicle {
 		} else if (route.getDestinationLocation().getLocationType() == LocationType.RECHARGING_STATION) {
 			timeSpent += refuel();
 		}
+		route.setTimeSpent(timeSpent);
 
 		currentDistance += vehiclePath.peek().getDistanceTravelled();
 		currentTime += timeSpent;

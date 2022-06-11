@@ -11,6 +11,7 @@ public class SimpleTimeEvaluator implements SolutionEvaluator{
 		for(Vehicle vehicle:solution.getVehicles().values()){
 			score+=vehicle.getCurrentTime();
 		}
+		solution.reset();
 		return score;
 	}
 }

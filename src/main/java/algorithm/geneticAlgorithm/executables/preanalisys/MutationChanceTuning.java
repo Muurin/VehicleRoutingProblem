@@ -1,6 +1,6 @@
 package algorithm.geneticAlgorithm.executables.preanalisys;
 
-import algorithm.geneticAlgorithm.actions.PreAnalisysLoggingCallback;
+import algorithm.geneticAlgorithm.actions.ResultLoggingCallback;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeConvergenceChecker;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeIntervalType;
 import algorithm.geneticAlgorithm.executables.GeneticAlgorithmFactory;
@@ -42,7 +42,7 @@ public class MutationChanceTuning {
                         new TournamentSelection(3, 0.6),
                         new EliminationWithElitism(0.2),
                         new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),
-                        new PreAnalisysLoggingCallback("", ""),
+                        new ResultLoggingCallback("", ""),
                         POP_SIZE);
 
                 geneticAlgorithmFactory.start(resultFilenames);

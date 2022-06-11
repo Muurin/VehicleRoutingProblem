@@ -6,13 +6,13 @@ import model.Location;
 import model.Vehicle;
 import solution.SolutionContext;
 import solution.SolutionContextFactory;
+import solution.evaluators.SolutionEvaluator;
 import util.PropertiesUtil;
 import util.SolutionUtil;
 import util.VehicleUtil;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NearestNeighbor {
 
@@ -33,7 +33,7 @@ public class NearestNeighbor {
                 currentVehicle.travelTo(nextLocation);
                 availableCustomers.remove(nextLocation);
                 nextLocation = SolutionUtil.findNearestLocationFromSet(availableCustomers, currentVehicle.getCurrentLocation());
-                if(nextLocation == null){
+                if (nextLocation == null) {
                     break;
                 }
             }
@@ -42,5 +42,5 @@ public class NearestNeighbor {
         }
         return solutionContext;
     }
-
+    
 }

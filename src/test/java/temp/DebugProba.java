@@ -13,13 +13,20 @@ import util.MathUtil;
 import util.SolutionUtil;
 import util.VehicleUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class DebugProba {
 
     public static void main(String[] args) throws IOException {
 
-        FileWriterUtil.writeToNewOrExistingFile("/Users/marinovcaricek/Diplomski rad/Results/preanalisys/population_tuning/Popsize_50","0","adanfo;abf;angao'");
+        Collection<String> resultingFiles = new HashSet<>(Arrays.asList(new File(Constants.gaAnalisysPath).list()));
+
+        Arrays.stream(new File(Constants.instancesPath).list()).filter(s -> !resultingFiles.contains(s)).forEach(s -> System.out.println(s));
+
     }
 
 }

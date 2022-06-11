@@ -1,6 +1,6 @@
 package algorithm.geneticAlgorithm.executables.preanalisys;
 
-import algorithm.geneticAlgorithm.actions.PreAnalisysLoggingCallback;
+import algorithm.geneticAlgorithm.actions.ResultLoggingCallback;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeConvergenceChecker;
 import algorithm.geneticAlgorithm.convergenceChecker.TimeIntervalType;
 import algorithm.geneticAlgorithm.executables.GeneticAlgorithmFactory;
@@ -8,7 +8,6 @@ import algorithm.geneticAlgorithm.model.PermutationGAChromosomeFactory;
 import algorithm.geneticAlgorithm.model.PopulationFactory;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
 import algorithm.geneticAlgorithm.operators.elimination.EliminationWithElitism;
-import algorithm.geneticAlgorithm.operators.mutation.CyclicMutation;
 import algorithm.geneticAlgorithm.operators.mutation.Mutation;
 import algorithm.geneticAlgorithm.operators.selection.TournamentSelection;
 import instanceLoaders.EVRP_CTWInstanceLoader;
@@ -24,8 +23,6 @@ import java.util.stream.IntStream;
 public class MutationTuning {
 
     private static final Integer POP_SIZE = 50;
-
-    private static final Double MUTATION_CHANCE = 0.2;
 
     private static final Crossover CROSSOVER = Constants.crossovers[0];
 
@@ -45,11 +42,11 @@ public class MutationTuning {
                 GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
                         new PopulationFactory(new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator())),
                         CROSSOVER,
-                        new CyclicMutation(5, MUTATION_CHANCE),
+                        mutation,
                         new TournamentSelection(3, 0.6),
                         new EliminationWithElitism(0.2),
                         new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),
-                        new PreAnalisysLoggingCallback("", ""),
+                        new ResultLoggingCallback("", ""),
                         POP_SIZE);
 
                 geneticAlgorithmFactory.start(resultFilenames);
