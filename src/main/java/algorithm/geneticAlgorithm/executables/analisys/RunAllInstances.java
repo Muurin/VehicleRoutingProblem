@@ -21,6 +21,7 @@ import util.ComputerPaths;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -31,7 +32,7 @@ import static algorithm.geneticAlgorithm.executables.preanalisys.Constants.*;
 
 public class RunAllInstances {
 
-    private static Queue<RunConfig> runConfigs = new PriorityQueue<>();
+    private static Queue<RunConfig> runConfigs =  new LinkedList<>();//new PriorityQueue<>();
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
