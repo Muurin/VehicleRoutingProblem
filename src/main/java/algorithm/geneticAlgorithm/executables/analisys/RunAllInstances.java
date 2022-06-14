@@ -17,6 +17,7 @@ import solution.SolutionContextFactory;
 import solution.evaluators.SimpleDistanceEvaluator;
 import solution.evaluators.SimpleTimeEvaluator;
 import solution.evaluators.TimeWindowEvaluator;
+import util.ComputerPaths;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,20 +31,25 @@ public class RunAllInstances {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        String pathToInstances = instancesPath;
+        String pathToInstances = ComputerPaths.pathToInstances;//instancesPath;
         String[] filenames = new File(pathToInstances).list();
 
         List<EvaluatorInfo> evaluatorInfos = List.of(EvaluatorInfo.builder().solutionEvaluator(new SimpleTimeEvaluator()).filename("TIME").build(),
                 EvaluatorInfo.builder().solutionEvaluator(new SimpleDistanceEvaluator()).filename("DISTANCE").build(),
                 EvaluatorInfo.builder().solutionEvaluator(new TimeWindowEvaluator()).filename("TIME_WINDOWS").build());
 
-
+        int cores = Runtime.getRuntime().availableProcessors();
+        int consecutiveRuns = cores / 10;
+        int count=0;
         for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
             for (String filename : filenames) {
+                if(count%consecutiveRuns==0 && count!=0){
+                    Thread.sleep(1000*60*10L);
+                }
                 if (filename.startsWith("read")) {
                     continue;
                 }
-
+                count++;
                 Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
 
                 PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());

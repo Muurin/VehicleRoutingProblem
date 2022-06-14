@@ -34,9 +34,6 @@ public class FileReaderUtil {
         for (String optimizedBy : criterias) {
             System.out.println();
             for (String evaluatedBy : criterias) {
-                if (!evaluatedBy.equals("TIME_WINDOWS")) {
-                    continue;
-                }
                 for (String ordinal : ordinals) {
                     double sum = 0;
                     try (
@@ -50,8 +47,8 @@ public class FileReaderUtil {
                             sum += Double.parseDouble(line.trim());
                         }
                     }
-                    System.out.println(String.valueOf(sum/5));
-//                    FileWriterUtil.writeToNewOrExistingFile(pathToResults + "/" + "COLLECTED_" + optimizedBy, evaluatedBy + ".txt", String.valueOf(sum));
+//                    System.out.println(String.valueOf(sum/5));
+                    FileWriterUtil.writeToNewOrExistingFile(pathToResults + "/" + "COLLECTED_" + optimizedBy, evaluatedBy + ".txt", String.valueOf(sum));
                 }
             }
         }

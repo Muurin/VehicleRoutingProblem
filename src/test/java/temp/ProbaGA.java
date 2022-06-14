@@ -24,6 +24,7 @@ import instanceLoaders.EVRP_CTWInstanceLoader;
 import instanceLoaders.InstanceLoader;
 import instances.Instance;
 import org.jdom2.JDOMException;
+import solution.evaluators.TimeWindowEvaluator;
 
 import java.io.IOException;
 
@@ -38,7 +39,10 @@ public class ProbaGA {
         InstanceLoader instanceLoader = new EVRP_CTWInstanceLoader();
         Instance instance = instanceLoader.load(instancePath);
 
-        GAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
+        GAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance),
+                new TimeWindowEvaluator()
+                //new SimpleDistanceEvaluator()
+        );
 
         PopulationFactory populationFactory = new PopulationFactory(gaChromosomeFactory);
 
@@ -46,7 +50,7 @@ public class ProbaGA {
         Mutation mutation = new CyclicMutation(2, 0.5);
         Elimination elimination = new EliminationWithElitism(0.5);
         Selection selection = new TournamentSelection(3, 0.3);
-        ConvergenceChecker convergenceChecker = new TimeConvergenceChecker(1, TimeIntervalType.MINUTE);
+        ConvergenceChecker convergenceChecker = new TimeConvergenceChecker(10, TimeIntervalType.MINUTE);
                 //new IterationConvergenceChecker(100);
        CallbackAction callbackAction = //new PreAnalisysLoggingCallback(tempPath+"/result",tempPath+"/progress","OX_Cyclic_c101_21.txt",100);
                 new TestingCallback();

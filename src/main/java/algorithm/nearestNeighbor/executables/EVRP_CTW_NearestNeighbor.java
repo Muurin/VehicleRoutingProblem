@@ -9,6 +9,7 @@ import solution.VRPInstancePaths;
 import solution.evaluators.SimpleDistanceEvaluator;
 import solution.evaluators.SolutionEvaluator;
 import org.jdom2.JDOMException;
+import solution.evaluators.TimeWindowEvaluator;
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ public class EVRP_CTW_NearestNeighbor {
 
 		SolutionContext solutionContext = new NearestNeighbor().start(instance);
 		solutionContext.getVehicles().values().stream().forEach(vehicle -> vehicle.getVehiclePath().forEach(route ->System.out.println(route.getDestinationLocation())));
-		SolutionEvaluator solutionEvaluator = new SimpleDistanceEvaluator();
+		SolutionEvaluator solutionEvaluator = new TimeWindowEvaluator();//new SimpleDistanceEvaluator();
 		double score = solutionEvaluator.evaluate(solutionContext);
 		System.out.println(score);
 

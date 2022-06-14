@@ -1,5 +1,6 @@
 package algorithm.geneticAlgorithm.executables.analisys;
 
+import util.ComputerPaths;
 import util.FileReaderUtil;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class ProcessAnalisysData1 {
     private static String[] ordinal = {"0","1","2", "3", "4","5","6","7","8","9"};
     public static void main(String[] args) throws IOException {
 
-      FileReaderUtil.processAnalisysDataByCriteria(STRING,criteria,ordinal);
+//      FileReaderUtil.processAnalisysDataByCriteria(STRING,criteria,ordinal);
+//        FileReaderUtil.processAnalisysDataByCriteria(ComputerPaths.pathToResults,criteria,ordinal);
     }
 }
