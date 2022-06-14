@@ -1,6 +1,7 @@
 package algorithm.geneticAlgorithm.executables;
 
 import algorithm.geneticAlgorithm.convergenceChecker.ConvergenceChecker;
+import algorithm.geneticAlgorithm.executables.analisys.RunConfig;
 import algorithm.geneticAlgorithm.model.PopulationFactory;
 import algorithm.geneticAlgorithm.operators.elimination.Elimination;
 import algorithm.geneticAlgorithm.operators.crossover.Crossover;
@@ -9,6 +10,8 @@ import algorithm.geneticAlgorithm.operators.selection.Selection;
 import algorithm.geneticAlgorithm.actions.CallbackAction;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -57,6 +60,22 @@ public class GeneticAlgorithmFactory {
                     elimination,
                     convergenceChecker.deepCopy(),
                     callbackAction.cloneWithDifferentConfiguration(threadSpecificCallbackConfig),
+                    popSize));
+            thread.start();
+        }
+    }
+
+    public void start(Collection<RunConfig> configs) throws InterruptedException {
+
+        for (RunConfig config: configs) {
+            Thread thread = new Thread(new GeneticAlgorithm(
+                    config.getPopulationFactory(),
+                    crossover,
+                    mutation,
+                    selection,
+                    elimination,
+                    convergenceChecker.deepCopy(),
+                    callbackAction.cloneWithDifferentConfiguration(config.getResultFilename()),
                     popSize));
             thread.start();
         }

@@ -22,12 +22,16 @@ import util.ComputerPaths;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static algorithm.geneticAlgorithm.executables.preanalisys.Constants.*;
 
 public class RunAllInstances {
+
+    private static Queue<RunConfig> runConfigs = new PriorityQueue<>();
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -39,24 +43,20 @@ public class RunAllInstances {
                 EvaluatorInfo.builder().solutionEvaluator(new TimeWindowEvaluator()).filename("TIME_WINDOWS").build());
 
         int cores = Runtime.getRuntime().availableProcessors();
-        int consecutiveRuns = cores / 10;
-        int count=0;
+        int count = 1;
         for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
             for (String filename : filenames) {
-                if(count%consecutiveRuns==0 && count!=0){
-                    Thread.sleep(1000*60*10L);
-                }
                 if (filename.startsWith("read")) {
                     continue;
                 }
-                count++;
                 Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
 
                 PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
                 CallbackAction callbackAction = new AnalisysMultipleEvaluatorsCallback(gaAnalisysPath + "_optimized_by_" + evaluatorInfo.getFilename(), null, gaChromosomeFactory, evaluatorInfos);
 
+                PopulationFactory populationFactory = new PopulationFactory(gaChromosomeFactory);
                 GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
-                        new PopulationFactory(gaChromosomeFactory),
+                        populationFactory,
                         new OX(),
                         mutations[3],
                         new TournamentSelection(3, 0.6),
@@ -65,9 +65,21 @@ public class RunAllInstances {
                         callbackAction,
                         populationSizes[0]);
 
-                List<String> resultFilenames = IntStream.range(0, 10).mapToObj(operand -> gaAnalisysPath +"/"+ evaluatorInfo.getFilename() + "," + operand).collect(Collectors.toList());
+                List<RunConfig> newConfigs = IntStream.range(0, 10).mapToObj(operand -> RunConfig
+                        .builder()
+                        .populationFactory(populationFactory)
+                        .resultFilename(ComputerPaths.pathToResults + "/" + evaluatorInfo.getFilename() + "," + operand)
+                        .build()).collect(Collectors.toList());
+                runConfigs.addAll(newConfigs);
 
-                geneticAlgorithmFactory.start(resultFilenames);
+                if (count++ % cores == 0 ) {
+
+                    List<RunConfig> toRun = IntStream.range(0, Math.min(cores, runConfigs.size())).mapToObj(operand -> runConfigs.poll()).collect(Collectors.toList());
+
+                    geneticAlgorithmFactory.start(toRun);
+
+                    Thread.sleep(1000 * 60 * 10L);
+                }
 
             }
         }
