@@ -51,7 +51,7 @@ public class GeneticAlgorithmFactory {
     }
 
     public void start(List<String> threadSpecificCallbackConfigs) throws InterruptedException {
-
+        List<Thread> threads = new LinkedList<>();
         for (String threadSpecificCallbackConfig: threadSpecificCallbackConfigs) {
             Thread thread = new Thread(new GeneticAlgorithm(
                     populationFactory,
@@ -62,7 +62,11 @@ public class GeneticAlgorithmFactory {
                     convergenceChecker.deepCopy(),
                     callbackAction.cloneWithDifferentConfiguration(threadSpecificCallbackConfig),
                     popSize));
+            threads.add(thread);
             thread.start();
+        }
+        for(Thread th:threads){
+            th.join();
         }
     }
 

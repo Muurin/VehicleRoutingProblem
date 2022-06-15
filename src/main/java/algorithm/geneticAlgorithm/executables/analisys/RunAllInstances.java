@@ -45,9 +45,6 @@ public class RunAllInstances {
         int count=0;
         for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
             for (String filename : filenames) {
-                if(count%cores==0 && count!=0){
-                    Thread.sleep(1000*60*10L);
-                }
                 if (filename.startsWith("read")) {
                     continue;
                 }
@@ -68,7 +65,7 @@ public class RunAllInstances {
                         callbackAction,
                         populationSizes[0]);
 
-                List<String> resultFilenames = IntStream.range(0, 10).mapToObj(operand -> gaAnalisysPath +"/"+ evaluatorInfo.getFilename() + "," + operand).collect(Collectors.toList());
+                List<String> resultFilenames = IntStream.range(0, 10).mapToObj(operand -> ComputerPaths.pathToResults +"/"+ evaluatorInfo.getFilename() + "," + operand).collect(Collectors.toList());
 
                 geneticAlgorithmFactory.start(resultFilenames);
 
