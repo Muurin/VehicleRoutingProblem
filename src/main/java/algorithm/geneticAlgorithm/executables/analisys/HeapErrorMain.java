@@ -30,7 +30,7 @@ import static algorithm.geneticAlgorithm.executables.preanalisys.Constants.*;
 
 public class HeapErrorMain {
 
-    private static Queue<RunConfig> runConfigs =  new LinkedList<>();//new PriorityQueue<>();
+    private static Queue<RunConfig> runConfigs = new LinkedList<>();//new PriorityQueue<>();
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -45,16 +45,18 @@ public class HeapErrorMain {
 
         int cores = Runtime.getRuntime().availableProcessors();
         int count = 1;
-        for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
-            for (String filename : filenames) {
+
+        for (String filename : filenames) {
+            Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
+
+            PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
+
+            PopulationFactory populationFactory = new PopulationFactory(gaChromosomeFactory);
+
+            for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
                 if (filename.startsWith("read")) {
                     continue;
                 }
-                Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
-
-                PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
-
-                PopulationFactory populationFactory = new PopulationFactory(gaChromosomeFactory);
 
                 List<RunConfig> newConfigs = IntStream.range(0, 10).mapToObj(operand -> RunConfig
                         .builder()
@@ -65,8 +67,7 @@ public class HeapErrorMain {
 
             }
         }
-        while(!runConfigs.isEmpty())
-        {
+        while (!runConfigs.isEmpty()) {
             GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
                     null,
                     new OX(),
