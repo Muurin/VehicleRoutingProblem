@@ -40,16 +40,12 @@ public class RunAllInstances {
                 EvaluatorInfo.builder().solutionEvaluator(new SimpleDistanceEvaluator()).filename("DISTANCE").build(),
                 EvaluatorInfo.builder().solutionEvaluator(new TimeWindowEvaluator()).filename("TIME_WINDOWS").build());
 
-
-        int cores = Runtime.getRuntime().availableProcessors();
-        int count=0;
         for (EvaluatorInfo evaluatorInfo : evaluatorInfos) {
             for (String filename : filenames) {
                 if (filename.startsWith("read")) {
                     continue;
                 }
 
-                count++;
                 Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
 
                 PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
