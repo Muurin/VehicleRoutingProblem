@@ -3,6 +3,7 @@ package algorithm.geneticAlgorithm.actions;
 import algorithm.geneticAlgorithm.executables.analisys.EvaluatorInfo;
 import algorithm.geneticAlgorithm.model.GAChromosomeFactory;
 import algorithm.geneticAlgorithm.model.Population;
+import solution.SolutionContext;
 import util.FileWriterUtil;
 
 import java.util.List;
@@ -22,9 +23,10 @@ public class AnalisysMultipleEvaluatorsCallback extends ResultLoggingCallback {
     @Override
     public void resultAction(Population population) {
         for(EvaluatorInfo evaluatorInfo:evaluatorInfos){
+            SolutionContext solution = gaChromosomeFactory.extendSolutionWithChargingStations(population.getIndividuals().peek().getGenes());
             FileWriterUtil.writeToNewOrExistingFile(resultPath,evaluatorInfo.getFilename(),
-                    String.valueOf(evaluatorInfo.getSolutionEvaluator().evaluate(gaChromosomeFactory.extendSolutionWithChargingStations(population.getIndividuals().peek().getGenes()))));
-
+                    String.valueOf(evaluatorInfo.getSolutionEvaluator().evaluate(solution)));
+            solution.reset();
         }
 
 
