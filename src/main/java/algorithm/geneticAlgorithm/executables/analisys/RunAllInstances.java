@@ -35,7 +35,8 @@ public class RunAllInstances {
         String pathToInstances = ComputerPaths.pathToInstances;//instancesPath;
         String[] filenames = new File(pathToInstances).list();
 
-        List<EvaluatorInfo> evaluatorInfos = List.of(EvaluatorInfo.builder().solutionEvaluator(new SimpleTimeEvaluator()).filename("TIME").build(),
+        List<EvaluatorInfo> evaluatorInfos = List.of(
+                EvaluatorInfo.builder().solutionEvaluator(new SimpleTimeEvaluator()).filename("TIME").build(),
                 EvaluatorInfo.builder().solutionEvaluator(new SimpleDistanceEvaluator()).filename("DISTANCE").build(),
                 EvaluatorInfo.builder().solutionEvaluator(new TimeWindowEvaluator()).filename("TIME_WINDOWS").build());
 

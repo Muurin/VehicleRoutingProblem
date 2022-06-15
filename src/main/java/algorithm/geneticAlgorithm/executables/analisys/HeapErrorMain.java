@@ -53,18 +53,8 @@ public class HeapErrorMain {
                 Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
 
                 PermutationGAChromosomeFactory gaChromosomeFactory = new PermutationGAChromosomeFactory(new SolutionContextFactory(instance), new SimpleDistanceEvaluator());
-                CallbackAction callbackAction = new AnalisysMultipleEvaluatorsCallback(gaAnalisysPath + "_optimized_by_" + evaluatorInfo.getFilename(), null, gaChromosomeFactory, evaluatorInfos);
 
                 PopulationFactory populationFactory = new PopulationFactory(gaChromosomeFactory);
-                GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
-                        populationFactory,
-                        new OX(),
-                        mutations[3],
-                        new TournamentSelection(3, 0.6),
-                        new EliminationWithElitism(0.2),
-                        new TimeConvergenceChecker(1, TimeIntervalType.MINUTE),
-                        callbackAction,
-                        populationSizes[0]);
 
                 List<RunConfig> newConfigs = IntStream.range(0, 10).mapToObj(operand -> RunConfig
                         .builder()
@@ -73,16 +63,26 @@ public class HeapErrorMain {
                         .build()).collect(Collectors.toList());
                 runConfigs.addAll(newConfigs);
 
-                if (count++ % cores == 0 ) {
-
-                    List<RunConfig> toRun = IntStream.range(0, Math.min(cores, runConfigs.size())).mapToObj(operand -> runConfigs.poll()).collect(Collectors.toList());
-
-                    geneticAlgorithmFactory.start(toRun);
-
-                    Thread.sleep(1000 * 60);
-                }
-
             }
+        }
+        while(!runConfigs.isEmpty())
+        {
+            GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
+                    null,
+                    new OX(),
+                    mutations[3],
+                    new TournamentSelection(3, 0.6),
+                    new EliminationWithElitism(0.2),
+                    new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),
+                    new AnalisysMultipleEvaluatorsCallback(null, null, null, evaluatorInfos),
+                    populationSizes[0]);
+
+
+            List<RunConfig> toRun = IntStream.range(0, Math.min(cores, runConfigs.size())).mapToObj(operand -> runConfigs.poll()).collect(Collectors.toList());
+
+            geneticAlgorithmFactory.start(toRun);
+
+
         }
     }
 }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -66,7 +67,7 @@ public class GeneticAlgorithmFactory {
     }
 
     public void start(Collection<RunConfig> configs) throws InterruptedException {
-
+        List<Thread> threads = new LinkedList<>();
         for (RunConfig config: configs) {
             Thread thread = new Thread(new GeneticAlgorithm(
                     config.getPopulationFactory(),
@@ -77,7 +78,11 @@ public class GeneticAlgorithmFactory {
                     convergenceChecker.deepCopy(),
                     callbackAction.cloneWithDifferentConfiguration(config.getResultFilename()),
                     popSize));
+            threads.add(thread);
             thread.start();
+        }
+        for(Thread th:threads){
+            th.join();
         }
     }
 
