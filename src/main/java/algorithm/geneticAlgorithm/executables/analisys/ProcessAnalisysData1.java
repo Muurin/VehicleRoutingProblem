@@ -16,6 +16,6 @@ public class ProcessAnalisysData1 {
     public static void main(String[] args) throws IOException {
 
 //      FileReaderUtil.processAnalisysDataByCriteria(STRING,criteria,ordinal);
-//        FileReaderUtil.processAnalisysDataByCriteria(ComputerPaths.pathToResults,criteria,ordinal);
+        FileReaderUtil.processAnalisysDataByCriteria(ComputerPaths.pathToResults,criteria,ordinal);
     }
 }

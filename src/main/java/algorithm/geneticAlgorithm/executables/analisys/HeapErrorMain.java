@@ -44,7 +44,6 @@ public class HeapErrorMain {
         );
 
         int cores = Runtime.getRuntime().availableProcessors();
-        int count = 1;
 
         for (String filename : filenames) {
             Instance instance = new EVRP_CTWInstanceLoader().load(pathToInstances + filename);
@@ -66,24 +65,27 @@ public class HeapErrorMain {
                 runConfigs.addAll(newConfigs);
 
             }
+
+            while (!runConfigs.isEmpty()) {
+                GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
+                        null,
+                        new OX(),
+                        mutations[3],
+                        new TournamentSelection(3, 0.6),
+                        new EliminationWithElitism(0.2),
+                        new TimeConvergenceChecker(5, TimeIntervalType.SECOND),
+                        new AnalisysMultipleEvaluatorsCallback(null, null, gaChromosomeFactory, evaluatorInfos),
+                        populationSizes[0]);
+
+
+                List<RunConfig> toRun = IntStream.range(0, Math.min(cores, runConfigs.size())).mapToObj(operand -> runConfigs.poll()).collect(Collectors.toList());
+
+                geneticAlgorithmFactory.start(toRun);
+
+
+            }
+            System.out.println("FINISHED");
         }
-        while (!runConfigs.isEmpty()) {
-            GeneticAlgorithmFactory geneticAlgorithmFactory = new GeneticAlgorithmFactory(
-                    null,
-                    new OX(),
-                    mutations[3],
-                    new TournamentSelection(3, 0.6),
-                    new EliminationWithElitism(0.2),
-                    new TimeConvergenceChecker(10, TimeIntervalType.MINUTE),
-                    new AnalisysMultipleEvaluatorsCallback(null, null, null, evaluatorInfos),
-                    populationSizes[0]);
 
-
-            List<RunConfig> toRun = IntStream.range(0, Math.min(cores, runConfigs.size())).mapToObj(operand -> runConfigs.poll()).collect(Collectors.toList());
-
-            geneticAlgorithmFactory.start(toRun);
-
-
-        }
     }
 }

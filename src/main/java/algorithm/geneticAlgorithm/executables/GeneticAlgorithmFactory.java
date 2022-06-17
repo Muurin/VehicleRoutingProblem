@@ -34,6 +34,18 @@ public class GeneticAlgorithmFactory {
 
     private final int popSize;
 
+    public GeneticAlgorithm create() {
+        return new GeneticAlgorithm(
+                populationFactory,
+                crossover,
+                mutation,
+                selection,
+                elimination,
+                convergenceChecker.deepCopy(),
+                callbackAction,
+                popSize);
+    }
+
     public void start(int nthread) throws InterruptedException {
 
         for (int i = 0; i < nthread; i++) {
@@ -50,9 +62,10 @@ public class GeneticAlgorithmFactory {
         }
     }
 
+
     public void start(List<String> threadSpecificCallbackConfigs) throws InterruptedException {
         List<Thread> threads = new LinkedList<>();
-        for (String threadSpecificCallbackConfig: threadSpecificCallbackConfigs) {
+        for (String threadSpecificCallbackConfig : threadSpecificCallbackConfigs) {
             Thread thread = new Thread(new GeneticAlgorithm(
                     populationFactory,
                     crossover,
@@ -65,14 +78,14 @@ public class GeneticAlgorithmFactory {
             threads.add(thread);
             thread.start();
         }
-        for(Thread th:threads){
+        for (Thread th : threads) {
             th.join();
         }
     }
 
     public void start(Collection<RunConfig> configs) throws InterruptedException {
         List<Thread> threads = new LinkedList<>();
-        for (RunConfig config: configs) {
+        for (RunConfig config : configs) {
             Thread thread = new Thread(new GeneticAlgorithm(
                     config.getPopulationFactory(),
                     crossover,
@@ -85,7 +98,7 @@ public class GeneticAlgorithmFactory {
             threads.add(thread);
             thread.start();
         }
-        for(Thread th:threads){
+        for (Thread th : threads) {
             th.join();
         }
     }
